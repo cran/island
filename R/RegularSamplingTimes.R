@@ -17,9 +17,9 @@
 #' @param level The name of the column with groups to calculate their c_e pair.
 #' @param otus Minimal number of rows for each group
 #' @param int Accuracy to calculate the c_e pairs with.
-#' @examples regular_sampling_scheme(alonso[[1]],3:6)
-#' regular_sampling_scheme(alonso[[1]],3:6,"Guild",5)
-#' regular_sampling_scheme(alonso[[1]],3:6,"Guild",5, 0.001)
+#' @examples regular_sampling_scheme(alonso15[[1]], 3:6)
+#' regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5)
+#' regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5, 0.001)
 #' @return A dataframe with colonization and extinction rates along with their
 #'   associated transition probabilities or their lower and upper confidence
 #'   intervals, for each group if specified.

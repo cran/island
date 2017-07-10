@@ -54,4 +54,3 @@ irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
 \code{\link{regular_sampling_scheme}},
   \code{\link{irregular_single_dataset}}
 }
-

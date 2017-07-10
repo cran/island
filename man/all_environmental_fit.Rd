@@ -55,7 +55,7 @@ extinction rates and environmental variables.
   AIC of the last accepted model.
 }
 \note{
-AIC is recomended to be higher than the AIC of the most simple model
+AIC is recommended to be higher than the AIC of the most simple model
   (i.e. not including environmental variables).
 }
 \examples{
@@ -73,4 +73,3 @@ params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
 \seealso{
 \code{\link{rates_calculator}}
 }
-

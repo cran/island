@@ -43,4 +43,3 @@ K. P.  Burnham, D. R. Anderson. \emph{Model selection and
 \seealso{
 \code{\link{akaikeic}}
 }
-

@@ -7,7 +7,7 @@
 #' \code{simulated_model} Error of the stochastic model. \cr \code{null_model}
 #' Error of the null model. \cr
 #'
-#' The importance of assesing how well a model predicts new data is paramount.
+#' The importance of assessing how well a model predicts new data is paramount.
 #' The most used metric to assess this model error is \eqn{R^2}.  \eqn{R^2} is
 #' always refered to a null model and is defined as follows: \deqn{R^{2} = 1 -
 #' \epsilon^{2} / \epsilon^{2}_0}{R^2 = 1 - \epsilon^2 / \epsilon^2_0} where
@@ -43,7 +43,7 @@
 #'   Letters}, \bold{18}, 451--461.
 #'
 #' @examples idaho.sim <- data_generation(as.data.frame(c(rep(0, 163),
-#' rep(1, 57))), 1, c(0.162599, 0.111252), 250, 20)
+#' rep(1, 57))), 1, matrix(c(0.162599, 0.111252), ncol = 2), 250, 20)
 #' idaho.me <- c(57, apply(idaho.sim, 1, quantile, 0.5))
 #' r_squared(colSums(idaho[[1]][,3:23]), idaho.me, 220)
 #'

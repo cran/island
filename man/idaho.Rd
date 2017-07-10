@@ -32,4 +32,9 @@ Only quadrats Q1, Q2, Q3, Q4, Q5, Q6, Q25 and Q26 are included here.
   The surveys were conducted annually from 1932 to 1955 with some gaps for
   the quadrats included here.
 }
-
+\references{
+Zachmann, L., Moffet, C., and Adler, P.. (2010). Mapped quadrats
+  in sagebrush steppe long-term data for analyzing demographic rates and
+  plant-plant interactions. \emph{Ecology},  \bold{91(11)}, 3427--3427.
+  \url{http://doi.wiley.com/10.1890/10-0404.1}
+}

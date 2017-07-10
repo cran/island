@@ -31,7 +31,7 @@
 #'   to the expressions of colonization and extinction rates and fix one at a
 #'   time until termination, when only adding one variable does not improve the
 #'   AIC of the last accepted model.
-#' @note AIC is recomended to be higher than the AIC of the most simple model
+#' @note AIC is recommended to be higher than the AIC of the most simple model
 #'   (i.e. not including environmental variables).
 #'
 #' @seealso \code{\link{rates_calculator}}

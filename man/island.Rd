@@ -20,10 +20,10 @@ In the simplest stochastic model of Island Biogeography, there is a
   colonization (\eqn{c}) and extinction (\eqn{e}) rates under perfect
   detectability. These are actual rates (in time^{-1} units). \cr The
   simplest stochastic model of island biogeography assumes a single
-  colonization-extinction pair for the whole community. This model implictly
+  colonization-extinction pair for the whole community. This model implicitly
   assumes: first, neutrality of the species in the community, that is, all
   species in the community share the same values for those rates; and second,
-  all species colonize and become extinct indepently from each other. The
+  all species colonize and become extinct independently from each other. The
   "species neutrality assumption" can be relaxed easily, for example,
   calculating different rates for different groups or on a per-species basis.
   In addition, we can make these rates depend on environmental variables
@@ -37,6 +37,7 @@ In the simplest stochastic model of Island Biogeography, there is a
   columns can contain the filiations of every species to a group, i. e. a
   phylogenetic group or a guild.
 }
+
 \references{
 Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R..
   (2015) Fish community reassembly after a coral mass mortality: higher
@@ -49,4 +50,3 @@ Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R..
   \emph{Ecology}, \bold{50(2)}, 296--314.
   \url{http://doi.org/10.2307/1934857}
 }
-

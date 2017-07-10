@@ -31,4 +31,3 @@ expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]), 21)
 \seealso{
 \code{\link{all_environmental_fit}}
 }
-

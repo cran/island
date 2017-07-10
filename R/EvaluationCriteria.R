@@ -2,10 +2,10 @@
 # different models.
 
 
-#' Akaike Information Criterium
+#' Akaike Information Criterion
 #'
-#' \code{akaikeic} calculates the Akaike Information Criterium (AIC) of a model.
-#' \cr \code{akaikeicc} calculates the corrected Akaike Information Criterium
+#' \code{akaikeic} calculates the Akaike Information Criterion (AIC) of a model.
+#' \cr \code{akaikeicc} calculates the corrected Akaike Information Criterion
 #' (AICc) for small samples.
 #'
 #' \deqn{AIC = 2 * k - 2 * lnL} \deqn{AICc = 2 * k - 2 * lnL + 2 * k *

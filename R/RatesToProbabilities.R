@@ -5,14 +5,14 @@
 #'
 #' @param c Colonization rate.
 #' @param e Extinction rate.
-#' @param dt Interval of time.
+#' @param dt Interval of time or a vector of time intervals.
 #'
 #' @details Given a pair of colonization and extinction rates, we can calculate
 #'   the transition probabilities with the following equations: \deqn{T_{01} = (e
 #'   / (c + e)) * (1 - exp( - (c + e) * dt))} \deqn{T_{10} = (c / (c + e)) * (1 -
 #'   exp( - (c + e) * dt))}
 #'
-#' @return The transition probabilities T_{01} and T_{10} of the Markov chain
+#' @return A matrix with the transition probabilities T_{01} and T_{10} of the Markov chain
 #'   associated with the specified colonization and extinction rates.
 #' @examples cetotrans(0.13, 0.19)
 #' cetotrans(0.2, 0.2, 2)
@@ -24,5 +24,7 @@ cetotrans <- function(c, e, dt = 1){
 
   T01 <- (e / (c + e)) * (1 - exp( - (c + e) * dt))
   T10 <- (c / (c + e)) * (1 - exp( - (c + e) * dt))
-  c(T01, T10)
+  out <- matrix(c(T01, T10), ncol = 2)
+  colnames(out) <- c("T01", "T10")
+  out
 }

@@ -23,5 +23,5 @@
 #'   groups are subject to increased rates of extinction. \emph{Ecology
 #'   Letters}, \bold{18}, 451--461.
 #'
-#' @name alonso
+#' @name alonso15
 NULL

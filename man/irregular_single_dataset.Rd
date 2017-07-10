@@ -51,4 +51,3 @@ irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 \code{\link{regular_sampling_scheme}},
   \code{\link{irregular_multiple_datasets}}
 }
-

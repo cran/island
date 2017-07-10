@@ -53,4 +53,3 @@ Wilson, E. O.. (2010). Island Biogeography in the 1960s: THEORY
   for Insular Colonization. \emph{Ecology}, \bold{50(2)}, 296--314.
   \url{http://doi.org/10.2307/1934857}
 }
-

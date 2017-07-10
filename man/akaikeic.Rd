@@ -3,7 +3,7 @@
 \name{akaikeic}
 \alias{akaikeic}
 \alias{akaikeicc}
-\title{Akaike Information Criterium}
+\title{Akaike Information Criterion}
 \usage{
 akaikeic(lnL, k)
 
@@ -22,8 +22,8 @@ A number with the AIC value for a model with k parameters and
   Log-likelihood lnL and sample size n.
 }
 \description{
-\code{akaikeic} calculates the Akaike Information Criterium (AIC) of a model.
-\cr \code{akaikeicc} calculates the corrected Akaike Information Criterium
+\code{akaikeic} calculates the Akaike Information Criterion (AIC) of a model.
+\cr \code{akaikeicc} calculates the corrected Akaike Information Criterion
 (AICc) for small samples.
 }
 \details{
@@ -38,4 +38,3 @@ akaikeicc(736.47, 6, 100)
 \seealso{
 \code{\link{weight_of_evidence}}
 }
-

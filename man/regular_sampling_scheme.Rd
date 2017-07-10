@@ -27,12 +27,11 @@ A dataframe with colonization and extinction rates along with their
 for a community or groups in a community.
 }
 \examples{
-regular_sampling_scheme(alonso[[1]],3:6)
-regular_sampling_scheme(alonso[[1]],3:6,"Guild",5)
-regular_sampling_scheme(alonso[[1]],3:6,"Guild",5, 0.001)
+regular_sampling_scheme(alonso15[[1]], 3:6)
+regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5)
+regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5, 0.001)
 }
 \seealso{
 \code{\link{irregular_single_dataset}},
   \code{\link{irregular_multiple_datasets}}
 }
-

@@ -11,10 +11,10 @@ cetotrans(c, e, dt = 1)
 
 \item{e}{Extinction rate.}
 
-\item{dt}{Interval of time.}
+\item{dt}{Interval of time or a vector of time intervals.}
 }
 \value{
-The transition probabilities T_{01} and T_{10} of the Markov chain
+A matrix with the transition probabilities T_{01} and T_{10} of the Markov chain
   associated with the specified colonization and extinction rates.
 }
 \description{
@@ -31,4 +31,3 @@ Given a pair of colonization and extinction rates, we can calculate
 cetotrans(0.13, 0.19)
 cetotrans(0.2, 0.2, 2)
 }
-
