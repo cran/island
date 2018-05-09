@@ -1,14 +1,14 @@
-# Here we have the environmental fit functions.
-
 #' Environmental fit for a single dataset
 #'
-#' \code{all_environmental_fit} calculates the best expressions for colonization
+#' \code{all_environmental_fit} estimates the best expressions for colonization
 #' and extinction rates given their dependency on environmental variables. \cr
-#' \code{greedy_environmental_fit} calculates expressions for colonization and
+#' \code{greedy_environmental_fit} estimates expressions for colonization and
 #' extinction rates given their dependency on environmental variables using a
-#' greedy algorithm. \cr \code{custom_environmental_fit} calculates the m.l.e.
-#' of the parameters describing the relationship between colonization and
-#' extinction rates and environmental variables.
+#' greedy algorithm. \cr \code{custom_environmental_fit} estimates the m.l.e. of
+#' the parameters describing the relationship between colonization and
+#' extinction rates and environmental variables. \cr \code{NLL_env} returns the
+#' Negative Log-Likelihood of a pair of colonization and extinction rates for a
+#' given dataset with an specific relationship with environmental variables.
 #'
 #' @param dataset A single dataset.
 #' @param vector A vector indicating the columns with presence-absence data.
@@ -16,13 +16,18 @@
 #' @param c Tentative colonization rate.
 #' @param e Tentative extinction rate.
 #' @param aic Tentative AIC to be improved by the optimizer.
-#' @param params A vector with priors of the parameters in exp1 and exp2.
-#' @param exp1 Expression for colonization.
-#' @param exp2 Expression for extinction.
+#' @param params A vector with priors of the parameters in c_expression and e_expression.
+#' @param c_expression Expression for colonization.
+#' @param e_expression Expression for extinction.
+#' @param verbose Logical. Do you want to get the intermediate steps looking for
+#'   the best model?
 #'
 #' @return A list with three components: a expression for colonization, a
 #'   expression for extinction and the output of the optimization function, or
 #'   the output of the optimization function in the custom environmental fit.
+#'   \cr In the case of \code{NLL_env}, returns the NLL of an specific set or
+#'   parameters describing the relationship of environmental covariates with
+#'   colonizaiton and extinction.
 #'
 #' @details \code{all_environmental_fit} calculates all the combinations of
 #'   parameters, that increase exponentially with the number of parameters. We
@@ -45,9 +50,12 @@
 #' custom_environmental_fit(idaho[[1]], 3:23, c(-0.00497925, -0.01729602,
 #' 0.19006501, 0.93486956), expression(params[1] * idaho[[2]]$TOTAL.ppt[i] +
 #' params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
+#' NLL_env(idaho[[1]], 3:23, c(-0.00497925, -0.01729602,
+#' 0.19006501, 0.93486956), expression(params[1] * idaho[[2]]$TOTAL.ppt[i] +
+#' params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
 #'
 #' @export
-all_environmental_fit <- function(dataset, vector, env, c, e, aic) {
+all_environmental_fit <- function(dataset, vector, env, c, e, aic, verbose = F) {
   co <- incounts(dataset, vector)
   t <- times(dataset, vector)
   env2 <- c(paste0(env, "[i]"), paste0(env, "[i]"))
@@ -85,31 +93,46 @@ all_environmental_fit <- function(dataset, vector, env, c, e, aic) {
       params <- c(rep(0, i), c, e)
 
       r <- stats::optim(params, dtlsolverenv, t = t, n00 = co[, 3], n10 = co[, 2],
-                 n01 = co[, 1], n11 = co[, 4], exp1 = cexp, exp2 = eexp,
+                 n01 = co[, 1], n11 = co[, 4], c_expression = cexp, e_expression = eexp,
                  control = list(maxit = 5000000, fnscale = - 1))
            aic2 <- - 2 * r$value + 2 * (i + 2)
       if (aic2 < aic) {
         aic <- aic2
-        print(list(cexp, eexp, r))
+        if (verbose) {
+          print(list(cexp, eexp, r))
+        }
+        cexpp <- cexp
+        eexpp <- eexp
+        rp <- r
       }
     }
   }
+  return(list(Colonization = cexpp, Extinction = eexpp, Results = rp))
 }
 
 #' @rdname all_environmental_fit
 #' @export
-custom_environmental_fit <- function(dataset, vector, params, exp1, exp2) {
+custom_environmental_fit <- function(dataset, vector, params, c_expression, e_expression) {
   co <- incounts(dataset, vector)
   t <- times(dataset, vector)
   r <- stats::optim(params, dtlsolverenv, t = t, n00 = co[, 3], n10 = co[, 2],
-             n01 = co[, 1], n11 = co[, 4], exp1 = exp1, exp2 = exp2,
+             n01 = co[, 1], n11 = co[, 4], c_expression = c_expression, e_expression = e_expression,
              control = list(maxit = 5000000, fnscale = - 1))
   r
 }
 
 #' @rdname all_environmental_fit
 #' @export
-greedy_environmental_fit <- function(dataset, vector,env, c, e, aic) {
+NLL_env <- function(dataset, vector, params, c_expression, e_expression) {
+  co <- incounts(dataset, vector)
+  t <- times(dataset, vector)
+  -dtlsolverenv(params, t = t, n00 = co[, 3], n10 = co[, 2],
+                n01 = co[, 1], n11 = co[, 4], c_expression = c_expression, e_expression = e_expression)
+}
+
+#' @rdname all_environmental_fit
+#' @export
+greedy_environmental_fit <- function(dataset, vector,env, c, e, aic, verbose = F) {
   co <- incounts(dataset, vector)
   t <- times(dataset, vector)
   env2 <- c(paste0(env, "[i]"), paste0(env, "[i]"))
@@ -161,21 +184,29 @@ greedy_environmental_fit <- function(dataset, vector,env, c, e, aic) {
       eexp <- parse(text = eexp)
       params <- c(rep(0, i), c, e)
       r<-stats::optim(params, dtlsolverenv, t = t, n00 = co[, 3], n10 = co[, 2],
-               n01 = co[, 1], n11 = co[, 4], exp1 = cexp, exp2 = eexp,
+               n01 = co[, 1], n11 = co[, 4], c_expression = cexp, e_expression = eexp,
                control = list(maxit = 5000000, fnscale = -1), hessian = F)
       aic2 <- -2 * r$value + 2 * (i + 2)
       if (aic2 < aic) {
         jota <- index[1, j]
         aic <- aic2
         event <- T
-        print(list(cexp, eexp, r))
+        if (verbose) {
+          print(list(cexp, eexp, r))
+        }
+        cexpp <- cexp
+        eexpp <- eexp
+        rp <- r
       }
     }
     if (event) selected <- rbind(selected, jota) else {
-      print("Last iteration found the solution for this algorithm.")
+      if (verbose) {
+        print("Last iteration found the solution for this algorithm.")
+      }
       break
     }
   }
+  return(list(Colonization = cexpp, Extinction = eexpp, Results = rp))
 }
 
 
@@ -184,9 +215,9 @@ greedy_environmental_fit <- function(dataset, vector,env, c, e, aic) {
 #' \code{rates_calculator} Calculate colonization and extinction rates depending
 #' of their expressions.
 #'
-#' @param params A vector with priors of the parameters in exp1 and exp2.
-#' @param exp1 Expression for colonization.
-#' @param exp2 Expression for extinction.
+#' @param params A vector with priors of the parameters in c_expression and e_expression.
+#' @param c_expression Expression for colonization.
+#' @param e_expression Expression for extinction.
 #' @param t Number of colonization and extinction pairs required.
 #'
 #' @return A matrix with the colonization and extinction rates.
@@ -199,21 +230,21 @@ greedy_environmental_fit <- function(dataset, vector,env, c, e, aic) {
 #'
 #'
 #' @export
-rates_calculator <- function(params, exp1, exp2, t) {
+rates_calculator <- function(params, c_expression, e_expression, t) {
   c <- vector(length = t)
   e <- vector(length = t)
   out <- data.frame()
   for (i in 1:t) {
-    c[i] <- eval(exp1)
-    e[i] <- eval(exp2)
+    c[i] <- eval(c_expression)
+    e[i] <- eval(e_expression)
   }
   out <- cbind(c, e)
   out
 }
 
-dtlsolverenv <- function(params, t, n00, n10, n01, n11, exp1, exp2){
-  c <- exp1
-  e <- exp2
+dtlsolverenv <- function(params, t, n00, n10, n01, n11, c_expression, e_expression){
+  c <- c_expression
+  e <- e_expression
   ll <- vector(length = length(t))
 
   for (i in 1:length(t)) {

@@ -2,34 +2,53 @@
 % Please edit documentation in R/RegularSamplingTimes.R
 \name{regular_sampling_scheme}
 \alias{regular_sampling_scheme}
+\alias{NLL_rss}
 \title{c/e rates for a regular sampling scheme}
 \usage{
-regular_sampling_scheme(x, vector, level = NULL, otus = NULL, int = NULL)
+regular_sampling_scheme(x, vector, level = NULL, n = NULL, step = NULL,
+  CI = F)
+
+NLL_rss(x, vector, c, e)
 }
 \arguments{
 \item{x}{A single dataset.}
 
 \item{vector}{A vector indicating the columns with presence-absence data.}
 
-\item{level}{The name of the column with groups to calculate their c_e pair.}
+\item{level}{The name of the column that contain groups used to subset them
+and calculate their colonization and extinction rates.}
 
-\item{otus}{Minimal number of rows for each group}
+\item{n}{Minimal number of rows for each group.}
 
-\item{int}{Accuracy to calculate the c_e pairs with.}
+\item{step}{Accuracy to calculate the c_e pairs with.}
+
+\item{CI}{Logical. Should confidence intervals be returned?}
+
+\item{c}{A colonization rate.}
+
+\item{e}{An extinction rate.}
 }
 \value{
-A dataframe with colonization and extinction rates along with their
-  associated transition probabilities or their lower and upper confidence
-  intervals, for each group if specified.
+\code{regular_sampling_scheme} returns a dataframe with colonization and extinction rates along with their
+  lower and upper confidence intervals (optional), for each group if
+  specified, and its number of rows and NLL.
+  \code{NLL_rss} gives the NLL for a dataframe given a specific c and e.
 }
 \description{
-\code{regular_sampling_scheme} calculates colonization and extinction rates
-for a community or groups in a community.
+\code{regular_sampling_scheme} estimates colonization and extinction rates
+for a community or groups in a community. \cr \code{NLL_rss} returns the Negative
+Log-Likelihood of a pair of colonization and extinction rates for a regular
+sampling scheme.
+}
+\details{
+The confidence intervals are calculated with a binary search seeded
+  with the hessian of the estimated rates.
 }
 \examples{
 regular_sampling_scheme(alonso15[[1]], 3:6)
-regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5)
-regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", 5, 0.001)
+regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", n = 5)
+regular_sampling_scheme(alonso15[[1]], 3:6, "Guild", n = 5, CI = TRUE)
+NLL_rss(alonso15[[1]], 3:6, 0.52, 0.39)
 }
 \seealso{
 \code{\link{irregular_single_dataset}},

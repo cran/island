@@ -2,10 +2,13 @@
 % Please edit documentation in R/IrregularSamplingTimes.R
 \name{irregular_single_dataset}
 \alias{irregular_single_dataset}
+\alias{NLL_isd}
 \title{c/e rates for irregular samplings in a dataset}
 \usage{
 irregular_single_dataset(dataframe, vector, c, e, column = NULL, n = NULL,
-  int = NULL, assembly = F)
+  step = NULL, assembly = F, jacobian = F, verbose = F, CI = F)
+
+NLL_isd(dataframe, vector, c, e, assembly = F)
 }
 \arguments{
 \item{dataframe}{A single dataframe.}
@@ -20,18 +23,32 @@ irregular_single_dataset(dataframe, vector, c, e, column = NULL, n = NULL,
 
 \item{n}{Minimal number of rows for each group}
 
-\item{int}{Accuracy to calculate the c_e pairs with.}
+\item{step}{Accuracy to calculate the c_e pairs with.}
 
-\item{assembly}{Logical indicating if the assembly starts from zero species or not.}
+\item{assembly}{Logical indicating if the assembly starts from zero species
+or not.}
+
+\item{jacobian}{Logical. Use the semianalytical method to estimate colonization
+and extinction rates?}
+
+\item{verbose}{Logical. If TRUE, gives the output of the optimizer or the
+numerical solver that finds the values of c and e.}
+
+\item{CI}{Logical. If TRUE, gives the confidence interval of the colonization
+and extinction rates.}
 }
 \value{
-A dataframe with colonization and extinction rates and their upper
-  and lower confidence interval, and if needed, the names of the groups to
-  which colonization and extinction rates have been calculated.
+\code{irregular_single_dataset} returns a dataframe with colonization
+  and extinction rates and their upper and lower confidence interval, and if
+  needed, the names of the groups to which colonization and extinction rates
+  have been calculated. \code{NLL_isd} gives the NLL for a single dataset in
+  an irregular sampling scheme given a specific c and e.
 }
 \description{
-\code{irregular_single_dataset} calculates colonization and extinction rates
-in a single dataset.
+\code{irregular_single_dataset} estimates colonization and extinction rates
+in a single dataset with irregular sampling scheme. \cr \code{NLL_isd} returns
+the Negative Log-Likelihood of a pair of colonization and extinction rates
+for an irregular sampling scheme in a single dataset.
 }
 \note{
 The columns with the presence-absence data should have the day of that
@@ -44,8 +61,9 @@ irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 0.001, 0.001, 3)
 \dontrun{
 irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
-0.001, 0.001, 3, 0.000001)
+0.001, 0.001, 3, 0.00001)
 }
+NLL_isd(simberloff[[1]], 3:17, 0.0038, 0.0086)
 }
 \seealso{
 \code{\link{regular_sampling_scheme}},

@@ -3,14 +3,17 @@
 \name{all_environmental_fit}
 \alias{all_environmental_fit}
 \alias{custom_environmental_fit}
+\alias{NLL_env}
 \alias{greedy_environmental_fit}
 \title{Environmental fit for a single dataset}
 \usage{
-all_environmental_fit(dataset, vector, env, c, e, aic)
+all_environmental_fit(dataset, vector, env, c, e, aic, verbose = F)
 
-custom_environmental_fit(dataset, vector, params, exp1, exp2)
+custom_environmental_fit(dataset, vector, params, c_expression, e_expression)
 
-greedy_environmental_fit(dataset, vector, env, c, e, aic)
+NLL_env(dataset, vector, params, c_expression, e_expression)
+
+greedy_environmental_fit(dataset, vector, env, c, e, aic, verbose = F)
 }
 \arguments{
 \item{dataset}{A single dataset.}
@@ -25,25 +28,33 @@ greedy_environmental_fit(dataset, vector, env, c, e, aic)
 
 \item{aic}{Tentative AIC to be improved by the optimizer.}
 
-\item{params}{A vector with priors of the parameters in exp1 and exp2.}
+\item{verbose}{Logical. Do you want to get the intermediate steps looking for
+the best model?}
 
-\item{exp1}{Expression for colonization.}
+\item{params}{A vector with priors of the parameters in c_expression and e_expression.}
 
-\item{exp2}{Expression for extinction.}
+\item{c_expression}{Expression for colonization.}
+
+\item{e_expression}{Expression for extinction.}
 }
 \value{
 A list with three components: a expression for colonization, a
   expression for extinction and the output of the optimization function, or
   the output of the optimization function in the custom environmental fit.
+  \cr In the case of \code{NLL_env}, returns the NLL of an specific set or
+  parameters describing the relationship of environmental covariates with
+  colonizaiton and extinction.
 }
 \description{
-\code{all_environmental_fit} calculates the best expressions for colonization
+\code{all_environmental_fit} estimates the best expressions for colonization
 and extinction rates given their dependency on environmental variables. \cr
-\code{greedy_environmental_fit} calculates expressions for colonization and
+\code{greedy_environmental_fit} estimates expressions for colonization and
 extinction rates given their dependency on environmental variables using a
-greedy algorithm. \cr \code{custom_environmental_fit} calculates the m.l.e.
-of the parameters describing the relationship between colonization and
-extinction rates and environmental variables.
+greedy algorithm. \cr \code{custom_environmental_fit} estimates the m.l.e. of
+the parameters describing the relationship between colonization and
+extinction rates and environmental variables. \cr \code{NLL_env} returns the
+Negative Log-Likelihood of a pair of colonization and extinction rates for a
+given dataset with an specific relationship with environmental variables.
 }
 \details{
 \code{all_environmental_fit} calculates all the combinations of
@@ -66,6 +77,9 @@ greedy_environmental_fit(idaho[[1]],3:23,c("idaho[[2]]$TOTAL.ppt",
 "idaho[[2]]$ANNUAL.temp"),0.13,0.19,100000)
 }
 custom_environmental_fit(idaho[[1]], 3:23, c(-0.00497925, -0.01729602,
+0.19006501, 0.93486956), expression(params[1] * idaho[[2]]$TOTAL.ppt[i] +
+params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
+NLL_env(idaho[[1]], 3:23, c(-0.00497925, -0.01729602,
 0.19006501, 0.93486956), expression(params[1] * idaho[[2]]$TOTAL.ppt[i] +
 params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
 

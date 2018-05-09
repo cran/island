@@ -5,12 +5,12 @@
 \alias{akaikeicc}
 \title{Akaike Information Criterion}
 \usage{
-akaikeic(lnL, k)
+akaikeic(NLL, k)
 
-akaikeicc(lnL, k, n)
+akaikeicc(NLL, k, n)
 }
 \arguments{
-\item{lnL}{Log-likelihood of the model.}
+\item{NLL}{Negative Log-Likelihood of the model.}
 
 \item{k}{Number of parameters of the model.}
 
@@ -18,8 +18,8 @@ akaikeicc(lnL, k, n)
 }
 \value{
 A number with the AIC value for a model with k parameters and
-  Log-likelihood lnL, or the AICc value for a model with k parameters,
-  Log-likelihood lnL and sample size n.
+  negative log-likelihood NLL, or the AICc value for a model with k parameters,
+  negative log-likelihood NLL and sample size n.
 }
 \description{
 \code{akaikeic} calculates the Akaike Information Criterion (AIC) of a model.
@@ -27,11 +27,11 @@ A number with the AIC value for a model with k parameters and
 (AICc) for small samples.
 }
 \details{
-\deqn{AIC = 2 * k - 2 * lnL} \deqn{AICc = 2 * k - 2 * lnL + 2 * k *
+\deqn{AIC = 2 * k + 2 * NLL} \deqn{AICc = 2 * k - 2 * lnL + 2 * k *
   (k + 1) / (n - k - 1)}
 }
 \examples{
-akaikeic(-1485.926, 3)
+akaikeic(1485.926, 3)
 akaikeicc(736.47, 6, 15)
 akaikeicc(736.47, 6, 100)
 }

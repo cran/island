@@ -1,0 +1,488 @@
+---
+title: "island: the Theory of Island Biogeography made easy"
+author: "Vicente J. Ontiveros & David Alonso"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+# Introduction
+## The Theory of Island Biogeography
+The Theory of Island Biogeography by MacArthur and Wilson (1967) is one of the most influential and successful theories in ecology, a rich source of inspiration for new research and ideas since it was first suggested. MacArthur and Wilson originally proposed that the number of species in an island is determined by the size of the island and its distance from the mainland. These factors result in a dynamic equilibrium between colonization from the mainland and extinction of species once they arrive on the island. The theory initially presented by MacArthur and Wilson was called ETIB (Simberloff 1974). Wilson and Simberloff's (1969) study of the experimental defaunation of mangrove islands in the Florida Keys was the first validation of the theory, which explicitly emphasizes its dynamic aspects, and it showed how different mangrove islands reached an equilibrium with a species richness equivalent to the number of species present before the experimental defaunation.   
+
+```{r CAPTION, echo=F, fig.align='center', fig.caption = T, fig.cap = "The classical representation of the Theory of Island Biogeography. Islands further from the mainland receive less species than closer ones, and there are more extinctions on small islands than on the large ones. The number of species at equilibrium corresponds to the point where colonization equals extinction.", fig.height=4.5, fig.width=6}
+plot(seq(0, 20, by = 2), type = "l", lty = 2, xlab = "Number of species", ylab = "Colonizations or Extinctions", col = "turquoise")
+lines(seq(0, 8, by = .8), col = "turquoise")
+lines(seq(8, 0, by = -.8), col = "coral")
+lines(seq(18, 0, by = -1.8), lty = 2, col = "coral")
+text(x = 2, y = 8, "far")
+text(x = 3, y = 16, "near")
+text(x = 9, y = 8, "large")
+text(x = 8, y = 16, "small")
+```
+
+The package `island` follows the stochastic implementation of Simberloff's model (1969) developed by Alonso *et al.* (2015), that uses a likelihood approach to estimate colonization and extinction rates for communities that have been repeatedly sampled through time.
+
+## Aims of this package
+This package allows:  
+1. Estimating colonization and extinction rates with regular and irregular sampling schemes, for whole communities or groups within those communities, taking into account or not imperfect detectability.  
+2. Converting those rates into transition probabilities.  
+3. Performing Akaike Information Criterion (AIC) -based model selection.  
+4. Estimating the influence of environmental variables on colonization and extinction dynamics.  
+5. Simulating the dynamics of the Equilibrium Theory of Island Biogeography, as well as three other population models.  
+6. Evaluating model error and R².  
+
+# Data entry
+In order to estimate colonization and extinction rates with package `island`, we need a dataframe of repeatedly sampled communities, organised in time and with at least one species (or the relevant taxonomic unit for our analysis). In this package we adopt the convention of indicating sampling times in columns and species in rows of the dataframe. As an example, take a look at the dataframe `data(alonso15)`, that uses a regular sampling scheme for 4 years (2000 to 2003).
+```{r, echo = F}
+library(island)
+data(alonso15)
+knitr::kable(head(alonso15[[2]]))
+```
+
+In the case of irregular sampling schemes, we adopt a convention of recording subsequent time intervals in the column header. For example, if our sampling started on day 17, and the next sample was taken 20 days after, that is, on day 37, the column heads for those samples should read 17 and 37. These conventions have been followed in `data(simberloff)`, extracted here: 
+```{r, echo = F}
+library(island)
+data(simberloff)
+knitr::kable(head(simberloff[[2]][, -(6:14)]))
+```
+
+In both examples, we can see that we have columns for the taxa (or species) studied, some columns with additional information (such as Guild or Taxonomic Unit considered), and consecutive columns with data on presence (1) or absence (0).  
+Studying ecological communities can be messy. Temporal studies that track changes over many sites may often result in sampling schemes that are irregular both in time and space. In cases where we have different sampling schemes in our data, we require the different sampling schemes to be treated as different dataframes inside a list. An example would be the data set `simberloff`.  
+
+# Likelihood and estimating colonisation and extinction rates  
+
+## The Equilibrium Theory of Island Biogeography (ETIB)  
+
+The seminal work of Wilson \& Simberloff (1969) on the experimental defaunation of mangrove islands in the Florida Keys was the first experimental validation of the ETIB, that predicted that colonization and extinction on an island would balance out and reach a dynamic equilibrium. The basic model underlying the theory can be expressed as follows: 
+$$ \frac{dS_s}{dt} = c(S_P - S_s) - eS_s $$
+where $S_s$ is the number of species present at a site, $S_P$ is the number of species in the regional pool, and $c$ and $e$ are colonization and extinction rates respectively. This model states that the temporal variation in the number of species in a site over time is equal to the total rate of arrival of species from the pool that are not already at the site minus the total rate of species loss from the site. The equation can be easily solved for a single species and we can compute the probability of a species being present or absent at any time (see Alonso *et al.* 2015). With these probabilities we can construct a matrix of transition probabilities for the associated Markov model:
+\begin{equation}
+  \label{T_00}
+  \left\{
+    \begin{array}{ccc}      
+      T_{00} &=&  1 - \frac{c}{e+c} ( 1 - \exp(-(e+c)\Delta t))\\
+      
+      T_{10} &=&  \frac{c}{e+c} ( 1 - \exp(-(e+c)\Delta t) )\\  
+      
+      T_{01} &=&  \frac{e}{e+c} ( 1 - \exp(-(e+c)\Delta t) ) \\
+      
+      T_{11} &=&  1 - \frac{e}{e+c} ( 1 - \exp(-(e+c)\Delta t)) 
+    \end{array}
+  \right.
+\end{equation} 
+where $T_{01}$ is the probability of extinction, $T_{10}$ the probability of colonization, $T_{11}$ of repeated presence and $T_{00}$ of repeated absence. Two key assumptions, the assumption of *species equivalence* (the same parameters apply for a group of species), and the assumption of *species independence* (the presence of other species does not affect the dynamics of a focal species), allow to generalize this Markov process to groups of species or even communities. We can therefore calculate the likelihood of a given data set under the colonization-extinction model with the following expression for a regular sampling scheme given specific colonization and extinction rates, *c* and *e*: 
+\begin{equation}
+  P( M | c, e) = (1-T_{10})^{N_{00}} T_{10}^{N_{10}} T_{01}^{N_{01}} (1-T_{01})^{N_{11}}
+\end{equation}
+where $N_{00}$ is the number of events of repeated absence, $N_{10}$ events of colonization, $N_{01}$ events of extinction and $N_{11}$ events of repeated presence. In the case of an irregular sampling scheme we need to calculate the transition probabilities and the matching likelihood for each transition.  
+As an example, imagine that we have sampled arthropods on an island for three seasons and we have the following data:
+```{r, echo = F}
+set.seed(10110111)
+df <- data.frame(Sp. = LETTERS[1:10], "1" = sample(c(0,1), 10, replace = T, prob = c(.6, .4)), "2" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)), "3" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)))
+colnames(df)[2:4] <- 1:3
+knitr::kable(df)
+```
+
+Here we can see that between samples 1 and 2 we have $N_{01} = 1$ (G), $N_{11} = 2$ (C, I), $N_{00} = 5$ (A, D, F, H, J), and $N_{10} = 2$ (B, E);  we can similarly calculate transitions between samples 2 and 3. Assuming we already know the true value of transition probabilities ($T_{01} = 0.4$, $T_{11} = 0.6$, $T_{00} = 0.7$ and $T_{10} = 0.3$), we can easily calculate the likelihood of the observed dataframe above as:
+```{r}
+### LIKELIHOOD
+0.4^3 * 0.6^4 * 0.7^10 * 0.3^3
+# This is a pretty small likelihood. We can easily transform this likelihood into log-likelihood.
+
+### LOG-LIKELIHOOD
+3 * log(0.4) + 4 * log(0.6) + 10 * log(0.7) + 3 * log(0.3)
+# This is the log-likelihood associated with the given set of transition probabilities. Notice that we obtain the same value with both approaches.
+log(0.4^3 * 0.6^4 * 0.7^10 * 0.3^3)
+```
+
+The method above allows us to calculate the likelihood of our data set from known transition probabilities. However, say that we do not know the transition probabilities and want to estimate them. We can do this easily with the following code:
+```{r}
+c_and_e <- regular_sampling_scheme(x = df, vector = 2:4)
+c_and_e
+```
+
+This gives us the rates $c$ and $e$, but where are the transition probabilities? We obtain them with the function `cetotrans`:
+```{r}
+cetotrans(c = c_and_e[1], e = c_and_e[4])
+```
+
+The equations $T_{11}= 1 - T_{01}$ and $T_{00} = 1 - T_{10}$ will give us a complete set of transition probabilities estimated from the data.
+
+## Rates Vs Transition Probabilities
+
+There are two main differences between transition probabilities and rates. First, transition probabilities are dimensionless numbers, while rates have dimensions of time$^{-1}$. Second, with rates we can directly estimate the transition probabilities for any time interval, while transition probabilities are associated with a specific time interval, so if we have $T_{10}=0.6$ for a specific time interval and we need the transition probability for twice that interval $T_{10}' \ne 2 \times 0.6$ but if a colonization rate per week is $c = 0.6 \ week^{-1}$ the colonization rate after 2 weeks would be $c' = 2 \ weeks \times 0.6 \ week^{-1}= 1.2$. This property allows us to work with irregular sampling schemes ---much more common in ecology than regular ones--- naturally, simply using a pair of colonization and extinction rates.  
+
+# Regular sampling schemes  
+
+The ideal scenario for ecological studies is one in which we sample our subject of study (say the community of fishes on an coral reef) regularly and frequently enough to observe changes in the community. Even though this is rare in ecology, this facilitates the estimation of rates and is less computationally intense. The estimation of rates for these regular sampling schemes has an analytically exact expression, while for irregular sampling schemes we need to rely on heuristic methods or numerical solvers  (see section Irregular Sampling Schemes).  
+Throughout this section, we will use `data(alonso15)`, a data set of three lists that have information on presence-absence of the community of coral reef fish communities in atolls in the Lakshadweep Archipelago (India). We will use data only from one of the atolls, Kadmat. The table below is an extract of the data:
+```{r}
+data("alonso15")
+df <- alonso15[[2]]
+knitr::kable(head(df))
+```
+
+We have several columns of data. The first column of the data.frame lists the species studied, while the second, its associated trophic level. The third to the eighth columns contain presence-absence data of temporal samples collected in consecutive years between 2000 to 2003 and once again in 2010-2011. Finally, the last column has data on the guild of the species studied. For example, the third entry in the data.frame has data for *Acanthurus lineatus*, an algal feeder present in all the years studied.
+
+## Estimating colonization and extinction rates  
+From here, we can start estimating colonization and extinction rates for the entire community using the function `regular_sampling_scheme`. First, we have to specify a single data.frame in the function using argument `x = ` and the name of our data.frame. Next, we need to tell the function in which columns the presence-absence data located with the argument `vector =`, in this case, columns 3 to 6. We will not use the data from 2010 and 2011. So let's estimate the colonization and extinction rates:
+```{r}
+rates <- regular_sampling_scheme(x = df, vector = 3:6)
+rates
+```
+
+As we can see the colonization rate is *c = 0.603* and the extinction rate *e = 0.351*. In addition, the output of the function tells us that we have examined 156 species and that the Negative Log-Likelihood of this model is *NLL = 276.576*.  
+What if we want to know the rates for each guild? We just have to add to the call the argument `level`, as in `level = "Guild"`, indicating the name of the column that divides the data into groups, and `n`, as in `n = 5` indicating the minimum number of species that a group needs in order to estimate its rates. 
+```{r}
+rates_g <- regular_sampling_scheme(x = df, vector = 3:6, level = "Guild", n = 5)
+rates_g
+```
+
+This calculates the colonization and extinction rates for each guild separately, e.g. corallivores or piscivores, as well as the number of species in each guild and the negative log-likelihood associated with these rates and data.  
+
+## Estimating Confidence Intervals
+The estimates of colonization and extinction rates can not be regarded as fixed values, but have an associated uncertainty due, at least in part, to the amount of data we use to calculate the estimates. In interpreting these results we recommend to calculate confidence intervals for the rates we have just estimated. Confidence intervals can be calculated using function `regular_sampling_scheme` with the argument `CI = T`. This option provides confidence intervals whose limits have a difference in log-likelihood of 1.96 units around the estimator.  
+We employ two separate methods to estimate confidence intervals: a sequential method, which is computationally expensive, and a binary search seeded with the Hessian of the likelihood function. The rationale of the sequential method is the following: we start from one of the parameters, say *c*, and we  sequentially add a small amount `step` to the parameter, obtaining the log-likelihood of the new value of the parameter, *c'*, until the difference in log-likelihood between *c* and *c'* climbs above 1.96. This gives us the upper boundary of *c*. The lower boundary is calculated similarly, but with sequential subtraction. This is a straightforward method, but it has to balance computational time and accuracy with the size of the interval `step`.  
+The alternative method uses the Hessian of the likelihood function as a seed for a binary search to determine the intervals. After some algebra, the Hessian provides an asymptotic estimator of the confidence interval, thus being a good starting point to look for the actual interval. The method works by calculating the likelihood of this asymptotic estimator and expanding the search (if the difference with our estimate is less than 1.96) or narrowing it (if it is greater than 1.96). This method typically finds the confidence interval in about 10 steps, and is significantly less computationally intense than the sequential method. However, in some cases, the value of the Hessian reduces almost to zero or produces a non-invertible matrix. In these cases,  we recommend using argument `step`.  
+Coming back to our example, we can calculate confidence intervals either for the entire community or for each studied guilds:
+```{r confidence intervals}
+rates2a <- regular_sampling_scheme(x = df, vector = 3:6, CI = T)
+rates2a
+
+# Sequential method
+rates2b <- regular_sampling_scheme(x = df, vector = 3:6, level = "Guild", n = 1, step = 0.005, CI = T)
+knitr::kable(rates2b)
+
+# Hessian-based method
+rates2c <- regular_sampling_scheme(x = df, vector = 3:6, level = "Guild", n = 1, CI = T)
+knitr::kable(rates2c)
+```
+
+As we can see, when the number of species in a group is low, uncertainty increases and expands the confidence intervals. In addition, the differences between the two methods are negligible in their output, except for the computational time needed.  
+
+## Likelihood profiles
+A likelihood profile is a simple way to bound the confidence interval of a parameter. Our sequential procedure is clearly based on likelihood profiles, and we will illustrate it using the function `NLL_rss`, that calculates the NLL of a model given its parameters. There are equivalent functions, `NLL_isd`, `NLL_imd` and `NLL_env` that produce the equivalent output with different sampling schemes or environmental influences on the parameters.  
+Next, for our case study, we will calculate the likelihood profile for colonization in Kadmat atoll. Function `NLL_rss` needs a dataframe `x`, a `vector` with the number of the columns to analyze, and given `c` and `e` rates. The procedure iteratively calculates the likelihood of the parameter given the data around the estimated value. The shape of the likelihood profile gives us an indication on how peaked around the maximum our likelihood functions are.
+
+```{r likelihood profile, fig.align = 'center', fig.height = 5, fig.width = 7, fig.caption = T, fig.cap = "Likelihood profile for the colonization rate in Kadmat atoll. The cross in magenta indicates the m.l.e. for the rate."}
+rates
+
+seqs <- seq.int(5, 200, by = 5) / 100
+NLLs <- NLL_rss(x = df, vector = 3:6, c = seqs * rates$c, e = rates$e)
+plot(seqs * rates$c, NLLs, type = "l", xlab = "Colonization rate (year⁻¹)", ylab = "Negative Log-Likelihood", main = "Likelihood profile")
+points(rates$c, rates$NLL, pch = 4, col = "magenta")
+```
+
+## A few words on model selection
+
+Model selection identifies the best model that fits a given data set. In this package we propose the use of the *Akaike Information Criterion* (AIC) and the associated measure of *weight of evidence* to choose the model that best fits the data and compares it against several alternative models. The functions in package `island` provide Negative Log-Likelihoods (NLLs) that can easily be transformed to AIC with functions `akaikeic` or `akaikeicc`. We can then calculate the `weight_of_evidence` for each competing model that potentially explains our observations. As a reminder, AICs are only comparable when we try to explain the same data with different models, because it makes no sense comparing the AIC of two different data sets with the same model, since the data is different in both cases.  
+Let us compare two competing models that try to explain the same data. We will use the data for Kadmat once again, to check if the model that treats each guild's dynamics separately better explains the data than the model that works with a single colonization and extinction pair of rates for the entire assemblage. For this, we will extract the NLL of both models, calculate their AIC using function `akaikeic`, and compare the results with function `weight_of_evidence`. 
+```{r model selection}
+guild_NLL <- sum(rates2c$NLL)
+guild_NLL
+comm_NLL <- rates$NLL
+comm_NLL
+
+aic_g <- akaikeic(NLL = guild_NLL, k = 14)
+aic_c <- akaikeic(NLL = comm_NLL, k = 2)
+aic_g
+aic_c
+
+ms_kadmat <- data.frame(Model = c("Guilds", "Community"), AIC = c(aic_g, aic_c))
+weight_of_evidence(data = ms_kadmat)
+```
+
+The output indicates that the log-likelihood of the model with different dynamics for each guild is over 12 points better than the model with a single dynamic group, which means that considering the guilds separately better explains the data than lumping together all guilds in a single group. However, the "guilds" model has 14 parameters while the "community" model has only 2. It is unsurprising that the more parameters the model has, the better it explains the data. For this reason, we calculate the AIC of each model using function `akaikeic`, that, to preserve parsimony, accounts for the number of parameters with the argument `k`. AIC values suggest that the "guilds" model is only marginally better than the "community" model, with a difference of 0.25. This is a tiny difference, and we cannot  conclusively say that one of the models has more support than the other. This analysis is backed by the function `weight_of_evidence`, that provides a measure of the support that each of the competing models has. We found that the "guilds" model has a weight of evidence of 53% while the "community" model is 47% and, as already noted, we cannot conclude that any model is significantly better. We will explore this dataset in some more detail in the section *A short example*. 
+
+## Simulating Colonization and Extinction Dynamics
+
+The package `island` allows to simulate ecological data driven by colonization and extinction dynamics. Functions `data_generation` and `PA_simulation` allow us to generate species richness or presence-absence data from an initial vector of presence-absence for specific transition probabilities that can vary between different simulated transitions. As an example, we will simulate the temporal evolution in richness for Kadmat atoll. 
+```{r Simulation Kadmat}
+### First, take a look at the rates for Kadmat
+tp <- cetotrans(c = rates$c, e = rates$e)
+
+set.seed(10110111)
+sim_1 <- PA_simulation(x = df, column = 3, transitions = tp, times = 11)
+colSums(sim_1)
+
+sims <- data_generation(x = df, column = 3, transitions = tp, iter = 999, times = 11)
+sims[, 1]
+
+ic <- apply(X = sims, MARGIN = 1, FUN = quantile, c(0.025, 0.975))
+ic
+rates 
+```
+
+```{r, echo = F, fig.align='center', fig.height=4.5, fig.width=6, fig.caption = T, fig.cap = "Temporal evolution in Kadmat atoll. The points connected with lines indicate the observed species richness, while the red dashed line indicates the 95% distribution of simulations. The dotted black line corresponds to one stochastic simulation of the colonization and extinction dynamics on the atoll."}
+plot(c(2000:2003, 2010, 2011), colSums(df[, 3:8]), type = "b", xlab = "Year", ylab = "Species richness", main = "Kadmat")
+lines(2001:2011, colSums(sim_1), lty = "dotted")
+lines(2001:2011, ic[1, ], col = "red", lty = 2)
+lines(2001:2011, ic[2, ], col = "red", lty = 2)
+
+```
+
+In the simulation above, we use colonization and extinction rates estimated with the first 4 samples to simulate community dynamics from 2000 to 2011. We can use this to evaluate how reliably our parameter estimates of colonization-extinction dynamics fit observed data. The plot above shows the actual observations, the result of a simulation (as a black dotted line) and the 95%  distribution of the simulations of the dynamics (the area enclosed within the two red dashed lines). The actual data falls well within the boundaries delimited by the simulation except for the last sample.  
+Finally, we will estimate goodness-of-fit calculating model R^2. Any estimation of R^2 requires a null model to compare with. R^2 measures how well our model performs in relation to a null model of choice. As a null model, here we assume that at any given time we can have a number of species present from 0 to $S_P$, the number of species in the pool, which is drawn from a uniform probability distribution. In order to estimate goodness-of-fit, we use the function `r_squared`, which requires us to specify the `observed` species richness, `simulated` species richness and the number of species in the pool `sp`. 
+```{r Model error}
+simulated <- apply(sims, 1, quantile, 0.5)
+simulated 
+
+simulated <- simulated[c(1:3, 10, 11)]
+
+observed <- colSums(df[, 3:8])
+observed
+
+# We skip the first observation since we have to use it as the starting point of the simulations.
+observed <- observed[-1] 
+
+r_squared(observed = observed, simulated = simulated, sp = 156)
+
+```
+
+The output indicates that we have a good fit compared to our null model. However, changes in the null model would lead to different estimates of R². For this reason, we also include function `simulated_model` that produces the quadratic error of a model given some data. We can estimate a new R² using a different null model and estimating its error with the previous function using the equation below:
+$$ R^2 = 1 - \frac{\epsilon^2}{\epsilon^2 _0 }$$
+  
+  
+# Irregular Sampling Schemes
+
+Given the complexities and challenges inherent to collecting real-world ecological data, temporal monitoring is often patchy, making irregular sampling schemes common in ecology. Data typically includes one or even several data sets with different sampling schemes. To accommodate the messiness of real-world data, 'island' has two functions `irregular_single_dataset` and `irregular_multiple_datasets`. Irregular sampling schemes force to alter the way in which we calculate colonization and extinction rates, precluding the use of the algebraic (exact) method for estimating rates. We can still calculate the likelihood of the dynamic model using two methods with different approaches: a *heuristic* method and a *semianalytical* method.
+
+## Heuristic Vs Semianalytical Methods
+The *heuristic* or *semianalytical* approaches of calculating rates are implemented in functions `irregular_single_dataset` and `irregular_multiple_dataset`, and we can switch between approaches using the argument `jacobian`.  
+The *heuristic* method uses R's built-in optimization routine, `optim`, to obtain estimates for the colonization and extinction rates. The function `optim` uses an implementation of the Nelder-Mead algorithm to find the optimum of the likelihood function. However, *heuristic* methods do not guarantee finding the global optima of the objective function, and they do not have a mechanism to evaluate how good the optima are for the selected point.  
+In contrast, the *semianalytical* method guarantees that the optima calculated is a root of the determinant of the Jacobian matrix of the likelihood function when the algorithm converges. In this package, we call routine `multiroot` from package `rootSolve` in order to find the semianalytical optimum value for our likelihood function.  
+Even though we encourage the use of the Jacobian-based method, it may not always converge. The function will notify possible problems, and we recommend using the heuristic method if difficulties are encountered. One way to find good initial values for the Jacobian-based method is to use the estimates of the heuristic method as a starting point.
+
+## Single dataset
+The function that deals with an irregular sampling scheme in a single data set is called `irregular_single_dataset`. An example, partially shown below (some samples have been skipped) and similar to the one reproduced earlier, is  data of island ST2 in `data(simberloff)`:
+```{r, echo = F}
+knitr::kable(head(simberloff[[6]][, -(6:13)]))
+```
+
+Functions `irregular_single_dataset` as well as `irregular_multiple_datasets` reproduce all the functionalities of `regular_sampling_schemes`. Please note that `irregular_single_dataset` requires numbers for the names of the columns with presence-absence data. The only other difference with the function for the regular sampling schemes is that we need to enter priors for *c* and *e*, our colonization and extinction rates, using arguments `c =` and `e =`.  
+Below we illustrate the use of this function with the data for island ST2 of data set `simberloff`. This data set was published by Simberloff and Wilson (1969). We start by estimating colonization and extinction rates for the whole island.
+
+```{r Single parameters, fig.align = 'center', fig.height = 4.5, fig.width = 6, fig.caption = T, fig.cap = "Colonization and extinction rates for the whole invertebrate community or selected taxonomic groups in island ST2."}
+st2 <- simberloff[[6]]
+
+# Before we begin, it is useful to look at the data for obvious errors.
+head(st2) 
+
+# Presence-absence data is in columns 3 to 16.
+rates.st2 <- irregular_single_dataset(dataframe = st2, vector = 3:16, c = 0.001, e = 0.001, assembly = T, jacobian = T)
+rates.st2
+
+# We will now estimate rates for different groups in "Tax. Unit 1" with more than 5 species.
+rates.groups <- irregular_single_dataset(dataframe = st2, vector = 3:16, c = 0.001, e = 0.001, column = "Tax. Unit 1", n = 5, assembly = T, jacobian = T)
+rates.groups
+
+# Plotting the results.
+plot(rates.groups[, 2], rates.groups[, 5], xlab = "Colonization rate (day⁻¹)", ylab = "Extinction rate (day⁻¹)", main = "ST2")
+points(rates.st2[, 1], rates.st2[, 4], pch = 4)                        
+loc <- list(x = c(0.004902829, 0.008421634, 0.006021524, 0.007679227, 0.007892796, 0.008025005, 0.006692741), y = c(0.008578302, 0.017145964, 0.014431104, 0.009668973, 0.011560750, 0.016878929, 0.011553715))
+
+text(loc, c(substr(rates.groups[, 1], 1, 3), "Whole \ncommunity"))
+
+```
+
+We can also produce transition probabilities for different time intervals and simulate these time intervals, allowing a more efficient use of processor time and memory. Functions `cetotrans` and `data_generation` are optimized to use with irregular time intervals. In the case of function `cetotrans`, arguments `c`, `e` and `dt` must be vectors of the same length, while for function `data_generation` arguments `transitions` and `times` should have the same number of rows and the same value, respectively. We simulate colonization and extinction dynamics for island ST2 300 times, and we observe that species richness reaches a steady-state after a while.
+
+```{r ST2 richness, fig.align = 'center', fig.height = 4.5, fig.width = 6, fig.caption = T, fig.cap = "Temporal evolution on island ST2. The points connected with lines indicate the observed species richness, while the red dashed line indicates the 95% of the distribution of simulations, and the green dashed line the median richness for 300 simulations."}
+dts <- as.numeric(colnames(st2)[4:16]) - as.numeric(colnames(st2)[3:15])
+dts <- c(21, dts)
+
+tps <- cetotrans(c = rep(rates.st2[[1]], length(dts)), e = rep(rates.st2[[4]], length(dts)), dt = dts)
+tps
+
+sims <- data_generation(x = matrix(0, 80, 1), column = 1, transitions = tps, iter = 300, times = length(dts))
+ic <- apply(sims, 1, quantile, probs = c(0.025, 0.975))
+ic
+
+med.st2 <- apply(sims, 1, median)
+
+days <- c(0, colnames(st2)[3:16]) 
+
+plot(days, c(0, colSums(st2[, 3:16])), ylim = c(0, 40), xlab = "Days since defaunation", ylab = "Species richness", main = "ST2", type = "b")
+lines(days, c(0, med.st2), col = "green", lty = 2)
+lines(days, c(0, ic[1, ]), col = "magenta", lty = 3)
+lines(days, c(0, ic[2, ]), col = "magenta", lty = 3)
+```
+
+
+## Multiple datasets
+Sampling schemes for similar communities can be very different due to multiple reasons usually associated to the challenges of ecological research. The function `irregular_multiple_datasets` allows us to use data from different sampling schemes and estimate joint parameters for these data sets. In order to use these data sets, they need to comply with the general structure for irregular sampling schemes and they should be combined in a list. The argument `list` will collate the data sets we want to study jointly and the argument `vectorlist` must contain the vectors (ordered in time) that indicate where the presence-absence data is located. The remaining arguments work as discussed in earlier sections.  Next we estimate colonization and extinction rates for each island and each taxonomic group in the whole dataset `simberloff`.  
+
+```{r, fig.align='center', fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Colonization and extinction rates for the data from Simberloff (1969) on experimental island zoogeography. In green, some of the groups studied, in magenta the different islands."}
+rates.simberloff <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.001, e = 0.001, jacobian = T)
+rates.islands <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.001, e = 0.001, column = "Island", n = 5, jacobian = T)
+rates.taxonomy <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.0001, e = 0.0001, column = "Tax. Unit 1", n = 20, jacobian = T)
+rates.simberloff
+rates.islands
+rates.taxonomy
+
+plot(rates.taxonomy[, 2], rates.taxonomy[, 5], xlim = c(.0034, .0074), ylim = c(.0025, .0225), pch = 20, main = "Simberloff dataset", xlab = "Colonization rate (day⁻¹)", ylab = "Extinction rate (day⁻¹)")
+points(rates.islands[, 2], rates.islands[, 5], pch = 4)
+points(rates.simberloff[, 1], rates.simberloff[, 4], pch = 3)
+
+locs <- list(x = c(0.005136858, 0.003858476, 0.005435459, 0.005724728, 0.004026439, 0.005379471, 0.006919129, 0.005015552, 0.005594090, 0.004912908, 0.006303266, 0.004722939, 0.006069984, 0.005435459, 0.005892691), y = c(0.01074532, 0.007403081, 0.014011605, 0.010289563, 0.012644324, 0.010593403, 0.011353003, 0.009985722, 0.017429807, 0.012872204, 0.018645168, 0.011201083, 0.006415600, 0.004212758, 0.015454846))
+text(locs, c("TIB", as.character(rates.islands$Group), substr(rates.taxonomy[, 1], 1, 3)), 
+     col = c("black", rep("magenta", 6), rep("green", 8)))
+
+```
+
+The rates obtained indicate differences among islands, specially in colonization, while the different taxonomic groups show different rates.  
+
+# A short example
+
+In this section, we will reproduce, step-by-step, some of the results presented in the article by Alonso *et al.* (2015), on the recolonization process of a coral reef fish community in the Lakshadweep Archipelago after a coral mass mortality event. This article shows that higher trophic guilds suffer increased rates of extinction even in the absence of targeted fishing.  
+The article estimated colonization and extinction rates for 4 competing models to explain the dynamics of the coral fish community, performed model selection among those models and simulated the dynamics of different trophic guilds in each island. The four models were: A, the different guilds in the three sampled islands behaved as a single community; B, each island had a different dynamics; C, each guild had a different dynamics, but did not vary between islands; and D, each guild had a different dynamics in each island. Below, we reproduce part of Table 1 of the article, showing the model selection procedure, Figure 3, showing the transition probabilities found by the best model, and a plot for the temporal evolution of corallivorous fishes in Agatti atoll, included in the original article in Figure 2.
+
+```{r alonso15 model selection}
+data(alonso15)
+head(alonso15[[2]]) # Examine the data
+
+# To begin, we calculate rates for each island (model B), and for each group in each island (model D).
+rates.aga <- regular_sampling_scheme(x = alonso15[[1]], vector = 3:6)
+rates.kad <- regular_sampling_scheme(x = alonso15[[2]], vector = 3:6)
+rates.kav <- regular_sampling_scheme(x = alonso15[[3]], vector = 3:5)
+
+ModelB <- rates.aga$NLL + rates.kad$NLL + rates.kav$NLL 
+
+
+rates.aga.guild <- regular_sampling_scheme(x = alonso15[[1]], vector = 3:6, level = "Guild", n = 1)
+rates.kad.guild <- regular_sampling_scheme(x = alonso15[[2]], vector = 3:6, level = "Guild", n = 1)
+rates.kav.guild <- regular_sampling_scheme(x = alonso15[[3]], vector = 3:5, level = "Guild", n = 1)
+
+ModelD <- sum(rates.aga.guild$NLL) + sum(rates.kad.guild$NLL) + sum(rates.kav.guild$NLL)
+
+# Next, we calculate rates using the function irregular_multiple_datasets. We need to first change the colnames of the columns with data.
+
+colnames(alonso15[[1]])[3:6] <- 2000:2003
+colnames(alonso15[[2]])[3:6] <- 2000:2003
+colnames(alonso15[[3]])[3:5] <- 2001:2003
+
+rates.lak <- irregular_multiple_datasets(list = alonso15, vectorlist = list(3:6, 3:6, 3:5), c = 0.1, e = 0.1, jacobian = T, CI = T)
+
+rates.guild <- irregular_multiple_datasets(list = alonso15, vectorlist = list(3:6, 3:6, 3:5), c = 0.1, e = 0.1, jacobian = T, column = "Guild", n = 1, CI = T)
+
+# We can now follow the model selection procedure used in the article.
+ModelA <- rates.lak$NLL
+ModelC <- sum(rates.guild$NLL)
+
+NLL <- c(ModelA, ModelB, ModelC, ModelD)
+NLL
+
+Parameters <- c(2, 6, 14, 42)
+N <- rep(1248, 4)
+
+AIC <- akaikeic(NLL = NLL, k = Parameters)
+AICc <- akaikeicc(NLL = NLL, k = Parameters, n = 1248)
+
+Table1 <- weight_of_evidence(data = data.frame(Model = c("A", "B", "C", "D"), AICc = AICc))
+Table1 <- cbind(Table1, AIC, AICc, NLL, Parameters, N)
+knitr::kable(Table1)
+
+```
+
+```{r alonso15 rates, fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Colonization and extinction probabilities by guild within the coral reef fish community in the Lakshadweep Archipelago, India. Algal Feeders (A), Omnivores (O), Corallivores (C), Zooplanktivores (Z), Micro-invertivores (m), Macro-invertivores (M), and Piscivores (P)."}
+# The following steps are used to reproduce Figure 3 in Alonso *et al* (2015).
+rates.guild
+
+# transform rates into transition probabilities.
+tps <- cetotrans(c = rates.guild$c, e = rates.guild$e)
+
+plot(tps[, 2], tps[, 1], xlim = c(0, 0.7), ylim = c(0, 0.5), type = "n", xlab = "Colonization probability", ylab = "Extinction probability", main = "Lakshadweep guilds")
+text(tps[, 2], tps[, 1], c("A", "C", "M", "m", "O", "P", "Z"))
+text(0.07, 0.25, "Trophic level", srt = 90, col = "magenta")
+arrows(0.1, 0.1, 0.1, 0.4, code = 2, col = "green")
+```
+
+```{r alonso15 sim, fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Temporal evolution of species richness of corallivores in Agatti atoll, according to model D. In red, the observed species richness, while the black dashed lines represent 95% of the distribution of 300 simulations with the estimated dynamics."}
+rates.aga.guild
+
+tps <- cetotrans(c = rates.aga.guild[2, 2], e = rates.aga.guild[2, 5])
+
+cor.agatti <- alonso15[[1]][alonso15[[1]]$Guild == "Corallivore", ]
+richness <- colSums(cor.agatti[, 3:8])
+richness
+
+sims <- data_generation(x = cor.agatti, column = 3, transitions = tps, iter = 300, times = 11)
+sims.ic <- apply(X = sims, MARGIN = 1, FUN = quantile, probs = c(0.025, 0.975))
+
+plot(c(2000:2003, 2010, 2011), richness, type = "b", ylim = c(0, 21), col = "red", xlab = "Time (Year)", ylab = "Species", main = "Corallivore/AGATTI")
+lines(c(2000:2011), c(7, sims.ic[1, ]), lty = 2)
+lines(c(2000:2011), c(7, sims.ic[2, ]), lty = 2)
+
+```
+
+
+# Environmental fit
+Apart from several biotic factors (e.g.. the presence of top predators or the abundance of primary producers), the number of species in a community can also be influenced by several abiotic factors (e.g.. temperature or rainfall) - referred to as environmental covariates. The package `island` includes functions `all_environmental_fit`, `greedy_environmental_fit`, `custom_environmental_fit` and `rates_calculator` to analyze the influence of environmental covariates on the colonization and extinction dynamics of ecological communities. The functions assume a linear functional response for environmental covariates,
+$$ c_t = \alpha_0 + \sum_{i=1}^F \alpha_{i} Y_{it}, \quad e_t = \beta_0 + \sum_{i=1}^F \beta_{i} Y_{it},$$
+where $Y_{it}$ is the value of the $i$-th environmental covariate ($i=1,\dots,F$) at time $t$, since it is the simplest way to build this dependency into colonization and extinction rates.  
+We employ R expressions in these functions. An `expression` is an R object, frequently a call, symbol or constant, that has to be evaluated prior to its use. We have minimized the use of expressions to make certain function calls easier to understand. However we make use of them internally and provide function `custom_environmental_fit` that needs two expressions in order to hone the results from `all_environmental_fit` and `greedy_environmental_fit` as well as developing custom dependencies with environmental covariates that can be specified by advanced users.  
+All three functions for environmental fit need a single argument `dataset` with the same structure as the one for irregular schemes and an argument `vector` indicating the columns containing presence absence data. In addition, all three functions need another `data.frame` with related environmental covariates in columns. The names of these columns have to be specified to functions `all_environmental_fit` and `greedy_environmental_fit` with the argument `env`. These two functions also need arguments `c`, `e` and `aic`, this is, tentative values for colonization and extinction rates and a tentative AIC value for the model. In practice, this AIC value should be chosen very large (of the order of 10⁸ but this depends on the size of the data set). The difference between `all_environmental_fit` and `greedy_environmental_fit` is that the latter employs a greedy algorithm that sequentially adds environmental covariates, one at a time, to the previously best set (using AIC), i. e., the algorithm finds first the best environmental covariate and then the best combination with two covariates including the previously selected, and so forth until AIC does not justify the addition of new covariates. In contrast `all_environmental_fit` tries all combinations of environmental variables, starting with the minimum number of environmental covariates to the maximum. Since the number of combinations rapidly becomes unmanageable, this method is not recommended except when we have few environmental variables.  
+We illustrate the use of these functions using `data(idaho)`. This is a long-term time series of a mapped plant community in Dubois, Idaho (USA). The plant community of a sagebrush steppe was mapped and identified from 1923 to 1973, using permanent 1-m² quadrats, and precipitation, mean temperature and snowfall were measured monthly (we added the annual mean for each one). The data included in this package is a sample of the full data set corresponding to several quadrats surveyed from 1932 to 1955 with some gaps. The following code explores the relation of this plant community with total annual precipitation and mean monthly temperature.
+```{r environmental fit, warning = F}
+data(idaho)
+df <- idaho[[1]]
+env <- idaho[[2]]
+
+# Examine the colnames.
+colnames(df)
+colnames(env)
+
+# Estimate the influence of temperature and precipitation on colonization and extinction dynamics. We first include the call to all_environmental_fit but we do not run it because of computation limits. We then use the greedy algorithm to find a good dependency.
+
+envfit <- greedy_environmental_fit(dataset = df, vector = 3:23, env = c("env$TOTAL.ppt", "env$ANNUAL.temp"), c = 0.13, e = 0.19, aic = 100000)
+envfit
+
+all_environmental_fit(dataset = df, vector = 3:23, env = c("env$TOTAL.ppt", "env$ANNUAL.temp"), c = 0.13, e = 0.19, aic = 100000) 
+
+```
+The greedy algorithm identified a model that included precipitation in the expression for colonization and temperature in the expression for extinction. The output of the function is a list that indicates that its first component is the expression for the colonization, the second one is the expression for the extinction, and the third one is the result of the optimizer for these expressions; in this case, the output of the function indicates that the colonization rate depends on precipitation (with a coefficient of -0.00497925 and an intercept of 0.19006501), the extinction rate depends on temperature (with a coefficient of -0.01729602 and an intercept of 0.93486956), and it has a log-likelihood of 1874.859 that was found after 215 calls to the corresponding likelihood function. This result was backed by function `all_environmental_fit`, that found the same dependency with the environmental covariates.  
+We will now use the function `custom_environmental_fit` to demonstrate its use and improve the result we found earlier. Besides arguments `dataset` and `vector`, this function requires an argument `params` that corresponds to the parameters estimated for expressions `c_expression` and `e_expression`, for colonization and extinction. Next, we use `rates_calculator`, that uses arguments `params`, `c_expression` and `e_expression` as in the previous function plus argument `t` that indicates the number of colonization and extinction rates needed. This function calculates the actual rates at each time in order to be able to simulate the dynamics of the colonization and extinction process resulting from these parameters. Please note that these rates have dimensions of time⁻¹, so when converting rates to transition probabilities we have to indicate the interval of time between samples for each rate. 
+```{r custom and calculator, warning = F,  fig.align='center', fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Temporal evolution of species richness in a plant community. The points connected with lines indicate the observed species richness, while the red dashed line indicates the 95% of the distribution of simulations, and the green dashed line the median richness for 300 simulations."}
+custom_environmental_fit(dataset = df, vector = 3:23, params = envfit$Results$par, c_expression = envfit$Colonization, e_expression = envfit$Extinction)
+
+rates.env <- rates_calculator(params = envfit$Results$par, c_expression =  envfit$Colonization, e_expression = envfit$Extinction, t = 21)
+head(rates.env)
+
+dts <- as.numeric(colnames(df)[4:23]) - as.numeric(colnames(df)[3:22])
+dts
+
+tps <- cetotrans(c = rates.env[-21, 1], e = rates.env[-21, 2], dt = dts)
+sims <- data_generation(x = df, column = 3, transitions = tps, iter = 100, times = 20)
+sims.ic <- apply(sims, 1, quantile, probs = c(0.025, 0.975))
+med.ida <- apply(sims, 1, quantile, probs = .5)
+sims.ic
+
+days <- 1900 + as.numeric(colnames(df)[3:23])
+
+
+plot(days, colSums(df[, 3:23]), type = "b", ylim = c(50, 115), pch = 4, ylab = "Accumulated species richness", xlab = "Year", main = "Sagebrush steppe Dubois, ID, USA")
+lines(days, c(57, sims.ic[1, ]), col = "magenta", lty = 3)
+lines(days, c(57, sims.ic[2, ]), col = "magenta", lty = 3)
+lines(days, c(57, med.ida), col = "green", lty = 2)
+
+
+```
+  
+  
+# Conclusion
+This vignette comprehensively illustrates most of the functionality of the package `island`. This package allows the estimation of colonization and extinction rates for whole communities or groups of species under two basic assumptions: *species independence* and *species equivalence*. It allows the user to employ typically messy ecological monitoring data with a variety of sampling schemes. It also enables explorations of the influence of environmental variables on colonization and extinction rates, and helps identify the best model explaining data using a model selection procedure. Finally, it simulates the dynamics of estimated parameters for simple stochastic models of island biogeography. For more details, take a look at the other vignettes of the package.  

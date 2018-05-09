@@ -1,8 +1,6 @@
 # This is the script for the functions and generics for the data generation
 # tool.
 
-# The only function should be envelope or newenvelope. Something like that.
-
 #' Data simulation of colonization-extinction dynamics
 #'
 #' \code{data_generation} simulates species richness data according to the
@@ -86,15 +84,23 @@ PA_simulation <- function(x, column, transitions, times = 1) {
     T10 <- rep(transitions[2], times)
 
   } else {
-    T01 <- c(0, transitions[,1])
-    T10 <- c(0, transitions[,2])
-    times <- nrow(transitions) + 1
-
+    if(nrow(transitions) != 1){
+      T01 <- c(transitions[,1])
+      T10 <- c(transitions[,2])
+      if(nrow(transitions) != times){
+        warning("The number of transitions supplied is not the same as argument times. Using the number of transitions instead.",
+                call. = F)
+      }
+      times <- nrow(transitions)
+    } else {
+      T01 <- rep(transitions[1], times)
+      T10 <- rep(transitions[2], times)
+    }
   }
   result <- matrix(NA, ncol = times, nrow = nrow(x))
   result[, 1] <- y
 
-  for (j in 2:times) {
+  for (j in 1:times) {
     al <- stats::runif(nrow(x))
     for (k in 1:nrow(x)) {
       if (y[k, 1] == 0) {

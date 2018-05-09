@@ -2,10 +2,13 @@
 % Please edit documentation in R/IrregularSamplingTimes.R
 \name{irregular_multiple_datasets}
 \alias{irregular_multiple_datasets}
+\alias{NLL_imd}
 \title{c/e rates for irregular samplings in multiple datasets}
 \usage{
 irregular_multiple_datasets(list, vectorlist, c, e, column = NULL, n = NULL,
-  CI = FALSE, assembly = F)
+  step = NULL, assembly = F, jacobian = F, verbose = F, CI = F)
+
+NLL_imd(list, vectorlist, c, e, assembly = F)
 }
 \arguments{
 \item{list}{A list of dataframes.}
@@ -21,19 +24,32 @@ presence-absence data.}
 
 \item{n}{Minimal number of rows for each group.}
 
+\item{step}{Accuracy to calculate the c_e pairs with.}
+
+\item{assembly}{Logical indicating if the assembly starts from zero species
+or not.}
+
+\item{jacobian}{Logical. Use the semianalytical method to estimate colonization
+and extinction rates?}
+
+\item{verbose}{Logical. If TRUE, gives the output of the optimizer or the
+numerical solver that finds the values of c and e.}
+
 \item{CI}{Logical. If TRUE, gives the confidence interval of the colonization
 and extinction rates.}
-
-\item{assembly}{Logical indicating if the assembly starts from zero species or not.}
 }
 \value{
-A dataframe with colonization and extinction rates and their upper
-  and lower confidence interval, and if needed, the names of the groups to
-  which colonization and extinction rates have been calculated.
+\code{irregular_multiple_datasets} returns a dataframe with
+  colonization and extinction rates and their upper and lower confidence
+  interval, and if needed, the names of the groups to which colonization and
+  extinction rates have been calculated. \code{NLL_imd} gives the NLL for a
+  multiple datasets with irregular sampling schemes given a specific c and e.
 }
 \description{
-\code{irregular_multiple_datasets} calculates colonization and extinction
-rates for data in several datasets.
+\code{irregular_multiple_datasets} estimates colonization and extinction
+rates for data in several datasets. \cr \code{NLL_imd} returns the Negative
+Log-Likelihood of a pair of colonization and extinction rates for irregular
+sampling schemes in several single dataset.
 }
 \note{
 The columns with the presence-absence data should have the day of that
@@ -49,6 +65,7 @@ irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
 irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
  3:16), 0.001, 0.001, "Tax. Unit 1", n = 13, CI = TRUE)
  }
+ NLL_imd(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), 0.0051, 0.0117)
 }
 \seealso{
 \code{\link{regular_sampling_scheme}},

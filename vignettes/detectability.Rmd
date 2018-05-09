@@ -1,0 +1,192 @@
+---
+title: "Estimating imperfect detectability"
+author: "Vicente J. Ontiveros & David Alonso"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Imperfect detectability.
+Most real-world ecological studies are characterized by imperfect detectability, i. e. the inability to detect a species or taxon despite its presence in a location. Imperfect detectability is a potential source of bias that must be avoided or at least estimated, particularly since it influences estimates of colonization and extinction. Unfortunately, it is not always possible to avoid or estimate the effects of imperfect detectability. We should be cautious in interpreting estimates derived from the methods that assume perfect detectability. However, when we have a replicated sampling design we can account for detectability while estimating colonization and extinction rates (MacKenzie *et al.* 2003).  
+
+
+```{r, echo = F, warning = F,  fig.height=5, fig.width=7,  fig.cap = "True colonization rates versus estimated colonization rates after applying the corresponding detectability filter to 30 pairs of rates chosen at random for 100 species and 6 times, assuming imperfect detectability. "}
+library(island)
+set.seed(4513423)
+ce <- matrix(runif(60), ncol = 2) #Random c-e rates
+tps <- cetotrans(ce[, 1], ce[, 2])
+
+ce_est <- matrix(NA, nrow = 30, ncol = 2)
+ce_est0.4 <- matrix(NA, nrow = 30, ncol = 2)
+ce_est0.95 <- matrix(NA, nrow = 30, ncol = 2)
+
+for (i in 1:30){
+  initial <- matrix(sample(0:1, 200, replace = T, prob = c(ce[i, 1], ce[i, 2])), ncol = 1)
+  data <- cbind(initial, PA_simulation(initial, 1, tps[i, ], times = 5))
+  
+  data1 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.95)
+  data2 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.95)
+  data3 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.95)
+  
+  df <- NULL
+  for(j in 1:6){
+    df <- cbind(df, data1[, j], data2[, j], data3[, j])
+  }
+  rrr <- unlist(sss_cedp(df, 1:6, rep(3, 6), Colonization = 0.5, Extinction = 0.5, Phi_Time_0 = 0.5, Detectability = 0.95))
+  
+  ce_est0.95[i,] <- c(rrr[1], rrr[2])
+  
+data1 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.4)
+  data2 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.4)
+  data3 <- data * (matrix(runif(ncol(data) * nrow(data)), nrow = nrow(data), ncol = ncol(data)) < 0.4)
+  
+  df <- NULL
+  for(j in 1:6){
+    df <- cbind(df, data1[, j], data2[, j], data3[, j])
+  }
+  rrr <- unlist(sss_cedp(df, 1:6, rep(3, 6), Colonization = 0.5, Extinction = 0.5, Phi_Time_0 = 0.5, Detectability = 0.4))
+ce_est0.4[i,] <- c(rrr[1], rrr[2])
+  
+}
+
+#Plotting
+par(mfrow=c(1, 2))
+plot(ce[, 1], ce_est0.4[, 1], xlab = "True Colonization", ylab = "Estimated Colonization", pch = 20)
+title(sub="d = 0.4")
+plot(ce[, 1], ce_est0.95[, 1], xlab = "True Colonization", ylab = "", pch = 20)
+title(sub="d = 0.95")
+
+
+```
+
+MacKenzie (2003) presents a likelihood function to estimate site occupancy, colonization, and local extinction when a species is detected imperfectly. The method relies on replicate observations per sampling time. The implementation of this likelihood is not trivial because there might be several underlying colonization-extinction trajectories that are compatible with the same observed detection history. For example, a detection history such as $\lbrace 101 \ 100 \rbrace$ means that in the first sampling time we have three replicates, $101$, where we detected our hypothetical species twice, and a second sampling time, where we observed $100$, this is, we detected the species only once. Since we detected it at least once at both time 0 and time 1, there is only one underlying colonization-extinction trajectory compatible with it, which, we take the convention of collapsing it into $( 1 \ 1 )$. However, imagine we fail to detect the species at time 1, being then our detection history $\lbrace 101 \ 000 \rbrace$. In this case, there are two underlying trajectories that are both compatible with this observation, since the species could have or could have not gone extinct at time 1. These are $( 1 \ 1 )$ and $( 1 \ 0 )$.  Therefore, the probability of the observed detection history $\lbrace 101 \ 000 \rbrace$ should sum over the two ways in which that detection history could have been observed, either through the trajectory $(1 \ 1 )$ or $(1 \ 0)$. For simplicity, let us analyse first what is the probability for the observed detection history $\lbrace 101 \ 100 \rbrace$. The first sampling time always considers the probability of the species being present at the site, $P_0$, as the fourth model parameter, and given that, the probability of making two out of three possible detections, $d^2·(1-d)$. The probability of being also present at the time 1 given that the species was present at time 0 is given by $T_{11}$, and given that, the probability of making only one out three possible detections is $d · (1-d)^2$, where $d$ is the detectability *per* replicate or probability of detecting a species when is present per observation. Taking all together, this leads us to the following probability for the full detection history:
+$$Pr(\lbrace 101 \ 100 \rbrace) = P_0 · d^2·(1-d)·T_{11} · d · (1-d)^2$$ 
+Now, let us examine the detection history $\lbrace 101 \ 000 \rbrace$. As mentioned, we have two possibilities for the second sampling time: the species could be present and have not been detected or could have been truly absent. Notice then that the probability of the full detection history should sum over the two underlying colonization-extinction histories, $\lbrace 1 \ 1 \rbrace$ and $\lbrace 1 \ 0 \rbrace$. It would be: 
+$$Pr(\lbrace 101 \ 000 \rbrace) = P_0 · d^2·(1-d) · T_{11} · (1-d)^3 + P_0 · d^2·(1-d) · T_{10} $$
+where $T_{10}$ is the probability of colonization. 
+
+As a final example, consider the detection history $\lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace$. This detection history can be produced by four underlying colonization-extinction trajectories. These are: $(1 \ 1 \ 1\ 1\ 1)$, $(1 \ 0 \ 1\ 1\ 1)$, $(1 \ 1 \ 1\ 0\ 1)$, $(1 \ 0 \ 1\ 0\ 1)$. The probability of this detection history should sum over these four possible underlying colonization-extinction trajectories because all are compatible with it. Below we detailed the four conditional probabilities: 
+
+$$Pr( \lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace | ( 1 \ 1 \ 1\ 1\ 1 ) ) = P_0·d·(1-d)^2 · T_{11}·(1-d)^3 · T_{11}·d^2·(1-d) · T_{11}·(1-d)^3 · T_{11}·d^3 $$ 
+
+$$Pr( \lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace | ( 1 \ 0 \ 1\ 1\ 1 ) ) = P_0·d·(1-d)^2 · T_{01} · T_{10}·d^2·(1-d) · T_{11}·(1-d)^3 · T_{11}·d^3 $$ 
+
+$$Pr( \lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace | ( 1 \ 1 \ 1\ 0\ 1 ) ) = P_0·d·(1-d)^2 · T_{11}·(1-d)^3 · T_{11}·d^2·(1-d) · T_{01} · T_{10}·d^3 $$ 
+
+$$Pr( \lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace | ( 1 \ 0 \ 1\ 0\ 1 ) ) = P_0·d·(1-d)^2 · T_{01} · T_{10}·d^2·(1-d) · T_{01} · T_{10}·d^3 $$ 
+
+  
+The algorithm implemented in island would sum over these four conditional probabilities to calculate the total probability for the initial detection history,$Pr( \lbrace 001 \ 000 \ 101 \ 000 \ 111 \rbrace )$.  Please note that, for real-life examples, when a species goes fully undetected for many sampling times, the full total sum becomes unfeasible because the number of compatible trajectories undergoes rapidly a combinatorial explosion. This may happen in practice if detectability per replicate is very low. In this case, only approximated likelihoods can be given. Alternatively, one could get around this problem by redesigning the full survey and taking more replicates per sampling time. As we have discussed in the main vignette of the package, transition probabilities $T_{00}, \ T_{10}, \ T_{01}, \ T_{11}$ are functions of the rates $c$ and $e$ for a given time interval $dt$ between observations. Therefore, we have all the elements required to estimate the likelihood of any detection history, even if time intervals between observations vary, which allows to find maximum likelihood estimates for the four model parameters, colonization and extinction rates, $c$ and $e$, along with the detectability, $d$, and the probability of initial presence, $P_0$. 
+
+## Data entry
+
+In order to estimate detectability, we need to provide presence-absence data with replicated samples for the same sampling time, as in the example below extracted from data set `lakshadweepPLUS`, where column X2000 and X2000.1 correspond to two replicate transects sampled in the same year. In addition, the data can have groups that can be treated as levels of a factor, as in column "Guild".
+
+```{r, echo = F}
+knitr::kable(head(lakshadweepPLUS[[1]][, 1:9]))
+```
+
+
+## Estimating colonization and extinction rates with imperfect detectability
+Functions `sss_cedp`, `mss_cedp` allow the estimation of colonization and extinction rates with imperfect detectability with simple and multiple sampling schemes, respectively. The function `sss_cedp` allows estimation for a single sampling scheme with repeated measures that has to be specified with arguments `Time`, that contains the unique sampling times, and argument `Transects` that specifies the number of of transects per sampling time. By contrast, `mss_cedp` allows the estimation of rates with perfect or imperfect detectability for multiple sampling schemes, via the use of flags for missing values specified by argument `MV_FLAG`, for the whole data set or groups of factors. A full sampling scheme should be specified with argument `Time`, which is internally used to calculate the particular sampling schemes associated to each separate row with the help of the missing value flags on the columns that have not been sampled. In the next example, we use data sets `lakshadweep` and `lakshadweepPLUS` to demonstrate the use of the previous functions. These data sets are extensions of data set `alonso15`, and include raw data (information of up to 4 transects per atoll at each sampling time, and additional samples for 2012 and 2013). Transects are considered as replicates. `lakshadweepPLUS` differs in marking missing data with a flag, combining the data for the three atolls in a single `data.frame`.
+
+```{r, examples}
+### Using sss_cedp
+Data1 <- lakshadweep[[1]]
+Name_of_Factors <- c("Species","Atoll","Guild")
+Factors <- Filter(is.factor, Data1)
+No_of_Factors <- length(Factors[1,])
+n <- No_of_Factors + 1
+D1 <- as.matrix(Data1[1:nrow(Data1),n:ncol(Data1)])
+Time <- as.double(D1[1,])
+P1 <- as.matrix(D1[2:nrow(D1),1:ncol(D1)])
+Time_Vector <- as.numeric(names(table(Time)))
+Transects   <- as.numeric((table(Time)))
+R1 <- sss_cedp(P1, Time_Vector, Transects,
+                       Colonization=0.5, Extinction=0.5, Detectability=0.5,
+                       Phi_Time_0=0.5,
+                       Tol=1.0e-8, Verbose = F)
+knitr::kable(unlist(R1))
+
+### Using mss_cedp
+Data <- lakshadweepPLUS[[1]]
+Guild_Tag = c("Alg","Cor","Mac","Mic","Omn","Pis","Zoo") # In alphabetical order.
+Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
+ 2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012,
+ 2012, 2012, 2012, 2013, 2013, 2013, 2013))
+R2 <- mss_cedp(Data, Time, Factor=3, Tags=Guild_Tag, PerfectDetectability=FALSE, z=4)
+```
+
+## Model selection grouping
+Model selection aims to select the best model for a given phenomenon with a reasonable number of parameters describing it and avoiding over-fitting. Our procedure is intended to distinguish, for example, guilds or islands with different colonization and extinction dynamics.
+The function `upgma_model_selection` incorporates an UPGMA algorithm based model selection procedure intended to find an optimal partition that minimizes AIC values. The algorithm needs a vector of tags in order to estimate the partition. This function allows the estimation of colonization and extinction rates with or without imperfect detectability.  
+The following example (using `lakshadweepPLUS`) shows the best model describing the dynamics of coral reef fishes in the Lakshadweep Archipelago, based on their guilds.  
+
+```{r, model selection}
+ Data <- lakshadweepPLUS[[1]]
+ Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
+ Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
+ 2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012,
+ 2012, 2012, 2012, 2013, 2013, 2013, 2013))
+ R3 <- upgma_model_selection(Data, Time, Factor = 3, Tags = Guild_Tag,
+ PerfectDetectability = FALSE, z = 4)
+```
+
+```{r, echo = F, fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Dendrogram of the upgma clustering of alternative models of colonization and extinction with imperfect detectability for Kadmath atoll. In red, the best model found, that groups together corallivores, macro and micro- invertivores."}
+ Rbis <- R2
+ rownames(Rbis) <- Guild_Tag
+ distance <- dist(Rbis[, 1:4])
+ cluster <- (hclust(distance, method = "average"))
+ cluster <- as.dendrogram(cluster)
+ plot(cluster, yaxt = "n", ylab = "AIC")
+text(c(0, 0, 0, 0, 0, 0, 0), c(.32, .27, .235, .18, .11, .073, .03), c(12800, 12713, 12715, 12680, 12672, 12678, 12681), col = c(rep("Black", 4), "Red", "Black", "Black"), xpd = T)
+lines(x = c(2, 2), y = c(0.292, 0.34), xpd=T) 
+lines(x = c(0.8, 7.2), y = c(.32, .32), xpd=T, lty = 3) 
+lines(x = c(0.8, 7.2), y = c(.27, .27), xpd=T, lty = 3) 
+lines(x = c(0.8, 7.2), y = c(.235, .235), xpd=T, lty = 3) 
+lines(x = c(0.8, 7.2), y = c(.18, .18), xpd=T, lty = 3) 
+lines(x = c(0.8, 7.2), y = c(.11, .11), xpd=T, lty = 3, col = "Red") 
+lines(x = c(0.8, 7.2), y = c(.073, .073), xpd=T, lty = 3) 
+lines(x = c(0.8, 7.2), y = c(.03, .03), xpd=T, lty = 3) 
+
+```
+
+The function `upgma_model_selection` also generates two output files in latex format (.tex) with: a) the parameters of the best model found under the model selection procedure and b) the summary of the procedure. Rmarkdown equivalent tables are included below. 
+
+| Species Group | Extinction Rate | Colonization Rate |
+|:-----|:------:|:------:|
+| Cor Mic Mac  | 0.22788 | 0.334553 |
+| Zoo  | 0.184582 | 0.404582 |
+| Pis  | 0.31265 | 0.364651 |
+| Omn  | 0.167086 | 0.184111 |
+| Alg  | 0.167592 | 0.544756 |
+
+Table: **Table 3:** Best model found.
+
+In table 3 (a), we find that corallivores, microinvertivores and macroinvertivores group together while the other guilds have their own estimates. 
+
+| Model | NLL | AIC | AIC corrected | AIC difference | AIC weights |
+|:-----|:------:|:------:|:------:|:------:|:------:|  
+| 2-parameter model | 6395.98 | 12800 | 12800 | 127.573 | 1.80675e-28 |
+| 4-parameter model | 6348.51 | 12713 | 12713 | 40.641 | 1.36121e-09 |
+| 6-parameter model | 6345.48 | 12715 | 12715 | 42.6136 | 5.07662e-10 |
+| 8-parameter model | 6324.1 | 12680.2 | 12680.3 | 7.87612 | 0.0177308 |
+| 10-parameter model | 6316.15 | 12672.3 | 12672.4 | 0 | 0.909928 |
+| 12-parameter model | 6314.83 | 12677.7 | 12677.8 | 5.39963 | 0.0611635 |
+| 14-parameter model | 6312.5 | 12681 | 12681.2 | 8.79881 | 0.0111781 |
+
+Table: **Table 4:** Summary of the UPGMA model selection procedure.
+
+Table 4 (b) shows the Negative Log-Likelihood, Akaike Information Criterion and associated measures for the models considered in the UPGMA-based model selection procedure.  

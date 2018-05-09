@@ -4,14 +4,14 @@
 \alias{rates_calculator}
 \title{Colonization and extinction rates calculator for expressions.}
 \usage{
-rates_calculator(params, exp1, exp2, t)
+rates_calculator(params, c_expression, e_expression, t)
 }
 \arguments{
-\item{params}{A vector with priors of the parameters in exp1 and exp2.}
+\item{params}{A vector with priors of the parameters in c_expression and e_expression.}
 
-\item{exp1}{Expression for colonization.}
+\item{c_expression}{Expression for colonization.}
 
-\item{exp2}{Expression for extinction.}
+\item{e_expression}{Expression for extinction.}
 
 \item{t}{Number of colonization and extinction pairs required.}
 }

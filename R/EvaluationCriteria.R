@@ -8,30 +8,28 @@
 #' \cr \code{akaikeicc} calculates the corrected Akaike Information Criterion
 #' (AICc) for small samples.
 #'
-#' \deqn{AIC = 2 * k - 2 * lnL} \deqn{AICc = 2 * k - 2 * lnL + 2 * k *
+#' \deqn{AIC = 2 * k + 2 * NLL} \deqn{AICc = 2 * k - 2 * lnL + 2 * k *
 #'   (k + 1) / (n - k - 1)}
 #'
-#' @param lnL Log-likelihood of the model.
+#' @param NLL Negative Log-Likelihood of the model.
 #' @param k Number of parameters of the model.
 #' @param n Sample size.
 #' @export
 #' @return A number with the AIC value for a model with k parameters and
-#'   Log-likelihood lnL, or the AICc value for a model with k parameters,
-#'   Log-likelihood lnL and sample size n.
+#'   negative log-likelihood NLL, or the AICc value for a model with k parameters,
+#'   negative log-likelihood NLL and sample size n.
 #' @seealso \code{\link{weight_of_evidence}}
-#' @examples akaikeic(-1485.926, 3)
+#' @examples akaikeic(1485.926, 3)
 #' akaikeicc(736.47, 6, 15)
 #' akaikeicc(736.47, 6, 100)
-akaikeic <- function(lnL, k) {
-
-  2 * k - 2 * lnL
+akaikeic <- function(NLL, k) {
+  2 * k + 2 * NLL
 }
 
 #' @rdname akaikeic
 #' @export
-akaikeicc <- function(lnL, k, n) {
-
-  2 * k - 2 * lnL + ( (2 * k * (k + 1)) / (n - k - 1))
+akaikeicc <- function(NLL, k, n) {
+  2 * k + 2 * NLL + ( (2 * k * (k + 1)) / (n - k - 1))
 }
 
 #' Weight of evidence
@@ -96,7 +94,7 @@ weight_of_evidence <- function(data) {
     w[i] <- x[i] / SumIncAIC
     }
 
-  out <- cbind(data[, 1], as.numeric(IncAIC), as.numeric(w))
+  out <- data.frame(data[, 1], as.numeric(IncAIC), as.numeric(w))
   colnames(out) <- c("Model", "IncAIC", "w")
   out
 }
