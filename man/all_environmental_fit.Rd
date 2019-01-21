@@ -9,7 +9,8 @@
 \usage{
 all_environmental_fit(dataset, vector, env, c, e, aic, verbose = F)
 
-custom_environmental_fit(dataset, vector, params, c_expression, e_expression)
+custom_environmental_fit(dataset, vector, params, c_expression,
+  e_expression)
 
 NLL_env(dataset, vector, params, c_expression, e_expression)
 

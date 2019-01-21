@@ -12,14 +12,14 @@
 
 <meta name="author" content="Vicente J. Ontiveros &amp; David Alonso" />
 
-<meta name="date" content="2018-05-09" />
+<meta name="date" content="2019-01-21" />
 
 <title>Estimating imperfect detectability</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -70,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Estimating imperfect detectability</h1>
 <h4 class="author"><em>Vicente J. Ontiveros &amp; David Alonso</em></h4>
-<h4 class="date"><em>2018-05-09</em></h4>
+<h4 class="date"><em>2019-01-21</em></h4>
 
 
 <div id="TOC">
@@ -192,37 +214,43 @@ Data1 &lt;-<span class="st"> </span>lakshadweep[[<span class="dv">1</span>]]
 Name_of_Factors &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Species&quot;</span>,<span class="st">&quot;Atoll&quot;</span>,<span class="st">&quot;Guild&quot;</span>)
 Factors &lt;-<span class="st"> </span><span class="kw">Filter</span>(is.factor, Data1)
 No_of_Factors &lt;-<span class="st"> </span><span class="kw">length</span>(Factors[<span class="dv">1</span>,])
-n &lt;-<span class="st"> </span>No_of_Factors +<span class="st"> </span><span class="dv">1</span>
-D1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(Data1[<span class="dv">1</span>:<span class="kw">nrow</span>(Data1),n:<span class="kw">ncol</span>(Data1)])
+n &lt;-<span class="st"> </span>No_of_Factors <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+D1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(Data1[<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Data1),n<span class="op">:</span><span class="kw">ncol</span>(Data1)])
 Time &lt;-<span class="st"> </span><span class="kw">as.double</span>(D1[<span class="dv">1</span>,])
-P1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(D1[<span class="dv">2</span>:<span class="kw">nrow</span>(D1),<span class="dv">1</span>:<span class="kw">ncol</span>(D1)])
+P1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(D1[<span class="dv">2</span><span class="op">:</span><span class="kw">nrow</span>(D1),<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(D1)])
 Time_Vector &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">names</span>(<span class="kw">table</span>(Time)))
 Transects   &lt;-<span class="st"> </span><span class="kw">as.numeric</span>((<span class="kw">table</span>(Time)))
 R1 &lt;-<span class="st"> </span><span class="kw">sss_cedp</span>(P1, Time_Vector, Transects,
                        <span class="dt">Colonization=</span><span class="fl">0.5</span>, <span class="dt">Extinction=</span><span class="fl">0.5</span>, <span class="dt">Detectability=</span><span class="fl">0.5</span>,
                        <span class="dt">Phi_Time_0=</span><span class="fl">0.5</span>,
                        <span class="dt">Tol=</span><span class="fl">1.0e-8</span>, <span class="dt">Verbose =</span> F)
-knitr::<span class="kw">kable</span>(<span class="kw">unlist</span>(R1))</code></pre></div>
+knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">unlist</span>(R1))</code></pre></div>
 <table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">x</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td align="left">C</td>
+<td>C</td>
 <td align="right">0.3212542</td>
 </tr>
 <tr class="even">
-<td align="left">E</td>
+<td>E</td>
 <td align="right">0.2007582</td>
 </tr>
 <tr class="odd">
-<td align="left">D</td>
+<td>D</td>
 <td align="right">0.4980380</td>
 </tr>
 <tr class="even">
-<td align="left">P</td>
+<td>P</td>
 <td align="right">0.5082734</td>
 </tr>
 <tr class="odd">
-<td align="left">NLL</td>
+<td>NLL</td>
 <td align="right">2200.7687093</td>
 </tr>
 </tbody>
