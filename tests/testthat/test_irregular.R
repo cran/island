@@ -1,6 +1,10 @@
 test_that("single dataset", {
-  set.seed(10110111)
-  M <- matrix(sample(c(0, 1), 100, replace = T), ncol = 10)
+  sample_data <-
+  c(0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0,
+    1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1,
+    1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1,
+    0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0)
+  M <- matrix(sample_data, ncol = 10)
   colnames(M) <- 1:10
   expect_equivalent(c(colSums(incounts(M, 1:10))), c(changes(M, 1:10)[1:4]))
   expect_equivalent(c(colSums(incounts(M, c(3, 5, 9)))),

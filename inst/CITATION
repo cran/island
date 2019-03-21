@@ -1,0 +1,18 @@
+citHeader("Please cite island in publications as follows:")
+
+citEntry(entry = "Article",
+title = "Colonization and Extinction Rates estimated from Temporal Dynamics of Ecological Communities: The island R Package",
+author       = "Vicente J. Ontiveros, Jose A. Capitan, Rohan Arthur,
+                Emilio O. Casamayor, David Alonso",
+  journal      = "Methods in Ecology and Evolution",
+  year         = "2019",
+#  volume       = "666",
+#  number       = "6",
+#  pages        = "1--25",
+#  url          = "http://www.jstatsoft.org/v40/i03/",
+
+textVersion =
+paste("Vicente J. Ontiveros, Jose A. Capitan, Rohan Arthur, Emilio O. Casamayor, David Alonso (2019).",
+        "Colonization and Extinction Rates estimated from Temporal Dynamics of Ecological Communities: The island R Package.",
+        "Methods in Ecology and Evolution, accepted.")
+)
