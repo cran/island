@@ -12,7 +12,7 @@
 
 <meta name="author" content="Vicente J. Ontiveros &amp; David Alonso" />
 
-<meta name="date" content="2019-03-20" />
+<meta name="date" content="2019-04-15" />
 
 <title>Estimating imperfect detectability</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Estimating imperfect detectability</h1>
 <h4 class="author"><em>Vicente J. Ontiveros &amp; David Alonso</em></h4>
-<h4 class="date"><em>2019-03-20</em></h4>
+<h4 class="date"><em>2019-04-15</em></h4>
 
 
 <div id="TOC">
@@ -263,20 +263,6 @@ Time &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class
  <span class="dv">2002</span>, <span class="dv">2003</span>, <span class="dv">2003</span>, <span class="dv">2003</span>, <span class="dv">2003</span>, <span class="dv">2010</span>, <span class="dv">2010</span>, <span class="dv">2011</span>, <span class="dv">2011</span>, <span class="dv">2011</span>, <span class="dv">2011</span>, <span class="dv">2012</span>,
  <span class="dv">2012</span>, <span class="dv">2012</span>, <span class="dv">2012</span>, <span class="dv">2013</span>, <span class="dv">2013</span>, <span class="dv">2013</span>, <span class="dv">2013</span>))
 R2 &lt;-<span class="st"> </span><span class="kw">mss_cedp</span>(Data, Time, <span class="dt">Factor=</span><span class="dv">3</span>, <span class="dt">Tags=</span>Guild_Tag, <span class="dt">PerfectDetectability=</span><span class="ot">FALSE</span>, <span class="dt">z=</span><span class="dv">4</span>)
-<span class="co">#&gt;  Data structure for the 0-th elemental group (Alg) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 1-th elemental group (Cor) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 2-th elemental group (Mac) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 3-th elemental group (Mic) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 4-th elemental group (Omn) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 5-th elemental group (Pis) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 6-th elemental group (Zoo) is done</span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt;  Group 0 (Alg):  NLL (Col = 0.544756, Ext = 0.167592, Dtc = 0.598818, P_0 = 0.662212) = 1399.03</span>
 <span class="co">#&gt;  Group 1 (Cor):  NLL (Col = 0.366281, Ext = 0.216484, Dtc = 0.49887, P_0 = 0.529949) = 817.113</span>
 <span class="co">#&gt;  Group 2 (Mac):  NLL (Col = 0.314384, Ext = 0.244689, Dtc = 0.4636, P_0 = 0.596814) = 1591.12</span>
@@ -297,20 +283,6 @@ The following example (using <code>lakshadweepPLUS</code>) shows the best model 
  R3 &lt;-<span class="st"> </span><span class="kw">upgma_model_selection</span>(Data, Time, <span class="dt">Factor =</span> <span class="dv">3</span>, <span class="dt">Tags =</span> Guild_Tag,
  <span class="dt">PerfectDetectability =</span> <span class="ot">FALSE</span>, <span class="dt">z =</span> <span class="dv">4</span>)
 <span class="co">#&gt; Number of Columns: 28</span>
-<span class="co">#&gt;  Data structure for the 0-th elemental group (Alg) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 1-th elemental group (Cor) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 2-th elemental group (Mac) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 3-th elemental group (Mic) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 4-th elemental group (Omn) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 5-th elemental group (Pis) is done</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Data structure for the 6-th elemental group (Zoo) is done</span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt;  Group 0 (Alg):  NLL (Col = 0.544756, Ext = 0.167592, Dtc = 0.598818, P_0 = 0.662212) = 1399.03</span>
 <span class="co">#&gt;  Group 1 (Cor):  NLL (Col = 0.366281, Ext = 0.216484, Dtc = 0.49887, P_0 = 0.529949) = 817.113</span>
 <span class="co">#&gt;  Group 2 (Mac):  NLL (Col = 0.314384, Ext = 0.244689, Dtc = 0.4636, P_0 = 0.596814) = 1591.12</span>
@@ -318,36 +290,6 @@ The following example (using <code>lakshadweepPLUS</code>) shows the best model 
 <span class="co">#&gt;  Group 4 (Omn):  NLL (Col = 0.184111, Ext = 0.167086, Dtc = 0.525903, P_0 = 0.426777) = 323.018</span>
 <span class="co">#&gt;  Group 5 (Pis):  NLL (Col = 0.364651, Ext = 0.31265, Dtc = 0.371796, P_0 = 0.450578) = 712.661</span>
 <span class="co">#&gt;  Group 6 (Zoo):  NLL (Col = 0.404582, Ext = 0.184582, Dtc = 0.558295, P_0 = 0.64373) = 619.948</span>
-<span class="co">#&gt;  About to enter the upgma clustering algorithm...</span>
-<span class="co">#&gt;  Just out from the upgma clustering algorithm...</span>
-<span class="co">#&gt; Partition: 0-th: Group 0-th: NLL (C = 0.350743, E = 0.216088, D = 0.511437, P = 0.566476) = 6395.98</span>
-<span class="co">#&gt; Partition: 1-th: Group 0-th: NLL (C = 0.327205, E = 0.229304, D = 0.481375, P = 0.547606) = 4949.48</span>
-<span class="co">#&gt; Partition: 1-th: Group 1-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
-<span class="co">#&gt; Partition: 2-th: Group 0-th: NLL (C = 0.342334, E = 0.236928, D = 0.479624, P = 0.558583) = 4623.44</span>
-<span class="co">#&gt; Partition: 2-th: Group 1-th: NLL (C = 0.184111, E = 0.167086, D = 0.525903, P = 0.426777) = 323.018</span>
-<span class="co">#&gt; Partition: 2-th: Group 2-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
-<span class="co">#&gt; Partition: 3-th: Group 0-th: NLL (C = 0.342605, E = 0.223334, D = 0.496246, P = 0.587435) = 3889.4</span>
-<span class="co">#&gt; Partition: 3-th: Group 1-th: NLL (C = 0.364651, E = 0.31265, D = 0.371796, P = 0.450578) = 712.661</span>
-<span class="co">#&gt; Partition: 3-th: Group 2-th: NLL (C = 0.184111, E = 0.167086, D = 0.525903, P = 0.426777) = 323.018</span>
-<span class="co">#&gt; Partition: 3-th: Group 3-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
-<span class="co">#&gt; Partition: 4-th: Group 0-th: NLL (C = 0.334553, E = 0.22788, D = 0.48032, P = 0.596204) = 3261.49</span>
-<span class="co">#&gt; Partition: 4-th: Group 1-th: NLL (C = 0.404582, E = 0.184582, D = 0.558295, P = 0.64373) = 619.948</span>
-<span class="co">#&gt; Partition: 4-th: Group 2-th: NLL (C = 0.364651, E = 0.31265, D = 0.371796, P = 0.450578) = 712.661</span>
-<span class="co">#&gt; Partition: 4-th: Group 3-th: NLL (C = 0.184111, E = 0.167086, D = 0.525903, P = 0.426777) = 323.018</span>
-<span class="co">#&gt; Partition: 4-th: Group 4-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
-<span class="co">#&gt; Partition: 5-th: Group 0-th: NLL (C = 0.320451, E = 0.229728, D = 0.477395, P = 0.591809) = 2443.06</span>
-<span class="co">#&gt; Partition: 5-th: Group 1-th: NLL (C = 0.366281, E = 0.216484, D = 0.49887, P = 0.529949) = 817.113</span>
-<span class="co">#&gt; Partition: 5-th: Group 2-th: NLL (C = 0.404582, E = 0.184582, D = 0.558295, P = 0.64373) = 619.948</span>
-<span class="co">#&gt; Partition: 5-th: Group 3-th: NLL (C = 0.364651, E = 0.31265, D = 0.371796, P = 0.450578) = 712.661</span>
-<span class="co">#&gt; Partition: 5-th: Group 4-th: NLL (C = 0.184111, E = 0.167086, D = 0.525903, P = 0.426777) = 323.018</span>
-<span class="co">#&gt; Partition: 5-th: Group 5-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
-<span class="co">#&gt; Partition: 6-th: Group 0-th: NLL (C = 0.314384, E = 0.244689, D = 0.4636, P = 0.596814) = 1591.12</span>
-<span class="co">#&gt; Partition: 6-th: Group 1-th: NLL (C = 0.332609, E = 0.202035, D = 0.501711, P = 0.588815) = 849.614</span>
-<span class="co">#&gt; Partition: 6-th: Group 2-th: NLL (C = 0.366281, E = 0.216484, D = 0.49887, P = 0.529949) = 817.113</span>
-<span class="co">#&gt; Partition: 6-th: Group 3-th: NLL (C = 0.404582, E = 0.184582, D = 0.558295, P = 0.64373) = 619.948</span>
-<span class="co">#&gt; Partition: 6-th: Group 4-th: NLL (C = 0.364651, E = 0.31265, D = 0.371796, P = 0.450578) = 712.661</span>
-<span class="co">#&gt; Partition: 6-th: Group 5-th: NLL (C = 0.184111, E = 0.167086, D = 0.525903, P = 0.426777) = 323.018</span>
-<span class="co">#&gt; Partition: 6-th: Group 6-th: NLL (C = 0.544756, E = 0.167592, D = 0.598818, P = 0.662212) = 1399.03</span>
 <span class="co">#&gt;  Partition 0-th: Number of estimated parameters: 2</span>
 <span class="co">#&gt; { Alg Cor Mac Mic Omn Pis Zoo } </span>
 <span class="co">#&gt;  NLL = 6395.98    AIC = 12800    AIC (corrected) = 12800  AIC_d = 127.573     AIC_w = 1.80675e-28</span>

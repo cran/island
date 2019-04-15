@@ -1,3 +1,5 @@
+context("Testing Environmental fit")
+
 test_that("Environmental fit", {
   ### !!! It seems that my use of expressions is not supported in testthat.
   ### Still, the functions work consistently and accurately. You can uncomment

@@ -1,3 +1,5 @@
+context("Detectability")
+
 ### The next test works locally but is not working when checking.
 
 # library(unmarked)
@@ -48,7 +50,7 @@
 #
 # detach("package:unmarked")
 
-
+context("Testing detectability")
 
 test_that("the detectability functions produce the same estimates", {
   Data <- lakshadweepPLUS[[1]]
@@ -56,9 +58,9 @@ test_that("the detectability functions produce the same estimates", {
   Time <- (as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002, 2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012, 2012, 2013, 2013, 2013, 2013)))
   Data <- Data[Data$Atoll == "KADMATH", -c(26, 27)]
   Rm <- mss_cedp(Data, Time, Factor = 3, Tags = Guild_Tag,
-                 PerfectDetectability = FALSE, z = 4, Verbose = F)
+                 PerfectDetectability = FALSE, z = 4, Verbose = 0)
   Ru <- upgma_model_selection(Data, Time, Factor = 3, Tags = Guild_Tag,
-                              PerfectDetectability = FALSE, z = 4, Verbose = F)
+                              PerfectDetectability = FALSE, z = 4, Verbose = 0)
 
   NLL <- sum(Rm[, 5]) # This should be equivalent to the NLL of the upgma's last model
 
@@ -70,7 +72,8 @@ test_that("the detectability functions produce the same estimates", {
   Rs <- sss_cedp(DataB, Time2, Transects,
                  Colonization=0.5, Extinction=0.5, Detectability=0.5,
                  Phi_Time_0=0.5,
-                 Tol=1.0e-12, Verbose = F)
+                 Tol=1.0e-12, Verbose = 0)
 
   expect_equivalent(Rs$NLL, Rm[3, 5]) # The NLL for the macroinvertivores is the same with mss and sss.
 })
+context("Name of test context")

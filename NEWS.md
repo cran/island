@@ -1,3 +1,8 @@
+# island 0.2.4
+* Memory leaks in C code solved.
+* Added DOI to citation.
+* Minor changes to documentation of the functions sss_cedp, mss_cedp and upgma_model_selection.
+
 # island 0.2.3
 
 * Tests sample data has been hardcoded to avoid problems of RNG versions.

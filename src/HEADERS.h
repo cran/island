@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include <R.h>
+
 #include <time.h>
 #include <assert.h>
 #include <limits.h>
@@ -19,10 +21,8 @@
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_sort_vector.h>
 #include <gsl/gsl_permutation.h>
-#include <gsl/gsl_multimin.h> 
+#include <gsl/gsl_multimin.h>
 #include <gsl/gsl_histogram.h>
-
-#include <R.h>
 
 #define MAX(A,B) ((A)>(B)? A:B)
 #define MIN(A,B) ((A)<(B)? A:B)

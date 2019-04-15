@@ -1,3 +1,5 @@
+context("Testing General")
+
 test_that("cetotrans", {
   expect_equal(nrow(cetotrans(rep(0.1, 3), rep(0.2, 3))), 3)
   expect_equal_to_reference(cetotrans(0.1, 0.2), "g1.rds")

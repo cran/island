@@ -1,3 +1,5 @@
+context("Testing rregular data sets")
+
 test_that("regular", {
   sample_data <-
     c(0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0,

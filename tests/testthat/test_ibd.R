@@ -1,5 +1,7 @@
 ### The following test doesn't works on CRAN, but works locally.
 
+context("Testing IBD models")
+
 # library(deSolve)
 #
 # test_that("IBD models conform to deterministic expectation", {

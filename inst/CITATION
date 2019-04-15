@@ -9,10 +9,10 @@ author       = "Vicente J. Ontiveros, Jose A. Capitan, Rohan Arthur,
 #  volume       = "666",
 #  number       = "6",
 #  pages        = "1--25",
-#  url          = "http://www.jstatsoft.org/v40/i03/",
+  url          = "https://doi.org/10.1111/2041-210X.13176",
 
 textVersion =
 paste("Vicente J. Ontiveros, Jose A. Capitan, Rohan Arthur, Emilio O. Casamayor, David Alonso (2019).",
         "Colonization and Extinction Rates estimated from Temporal Dynamics of Ecological Communities: The island R Package.",
-        "Methods in Ecology and Evolution, accepted.")
+        "Methods in Ecology and Evolution, https://doi.org/10.1111/2041-210X.13176")
 )

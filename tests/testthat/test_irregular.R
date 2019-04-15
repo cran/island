@@ -1,3 +1,5 @@
+context("Testing irregular data sets")
+
 test_that("single dataset", {
   sample_data <-
   c(0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0,
