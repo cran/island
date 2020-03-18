@@ -94,7 +94,8 @@ weight_of_evidence <- function(data) {
     w[i] <- x[i] / SumIncAIC
     }
 
-  out <- data.frame(data[, 1], as.numeric(IncAIC), as.numeric(w))
+  out <- data.frame(data[, 1], as.numeric(IncAIC), as.numeric(w),
+                    stringsAsFactors = T)
   colnames(out) <- c("Model", "IncAIC", "w")
   out
 }

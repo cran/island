@@ -52,7 +52,6 @@
 #' @param  Verbose more/less (1/0) information about the optimization algorithm will be printed out.
 #' @param  MV_FLAG missing value flag (to specify sites and times where no sample exists)
 #' @param  PerfectDetectability TRUE means 'Perfect Detectability'. Of course, FALSE means 'Imperfect Detectability'
-#' @keywords Akaike, upgma, colonization, extinction, detectability
 #' @useDynLib island
 #' @export
 #' @examples

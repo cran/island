@@ -1,4 +1,4 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -52,10 +52,10 @@ title(sub="d = 0.95")
 
 
 
-## ---- echo = F-----------------------------------------------------------
+## ---- echo = F----------------------------------------------------------------
 knitr::kable(head(lakshadweepPLUS[[1]][, 1:9]))
 
-## ---- examples-----------------------------------------------------------
+## ---- examples----------------------------------------------------------------
 ### Using sss_cedp
 Data1 <- lakshadweep[[1]]
 Name_of_Factors <- c("Species","Atoll","Guild")
@@ -81,7 +81,7 @@ Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
  2012, 2012, 2012, 2013, 2013, 2013, 2013))
 R2 <- mss_cedp(Data, Time, Factor=3, Tags=Guild_Tag, PerfectDetectability=FALSE, z=4)
 
-## ---- model selection----------------------------------------------------
+## ---- model selection---------------------------------------------------------
  Data <- lakshadweepPLUS[[1]]
  Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
  Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,

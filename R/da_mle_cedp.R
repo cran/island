@@ -51,7 +51,6 @@
 #' @param  Verbose more/less (1/0) information about the optimization algorithm will be printed out.
 #' @param  MV_FLAG missing Value Flag (to specify sites and times where no sample exists)
 #' @param  PerfectDetectability TRUE means 'Perfect Detectability'. Of course, FALSE means 'Imperfect Detectability'
-#' @keywords maximum likelihood, colonization, extinction
 #' @useDynLib island
 #' @export
 #' @examples

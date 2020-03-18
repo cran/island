@@ -56,7 +56,6 @@
 #' @param  z dimension of the parameter subspace
 #' @param  Verbose more/less (1/0) output information
 #' @param  Minimization TRUE/FALSE.
-#' @keywords mle, MacKenzie, colonization, extinction
 #' @useDynLib island
 #' @export
 #' @examples

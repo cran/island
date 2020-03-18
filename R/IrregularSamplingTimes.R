@@ -333,7 +333,7 @@ levelwrap2 <- function(dataset, vector, column, c, e, n, step = NULL, assembly,
     outb <- wrapper(x, vector, c, e, step, assembly, jacobian, verbose, CI,
                     group = groups[k])
 
-    out <- data.frame(groups[k], outb)
+    out <- data.frame(groups[k], outb, stringsAsFactors = T)
     colnames(out) <- c("Group", colnames(outb))
     out2 <- rbind(out2, out)
   }

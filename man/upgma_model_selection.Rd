@@ -4,17 +4,39 @@
 \alias{upgma_model_selection}
 \title{Model selection function based on a upgma grouping algorithm}
 \usage{
-upgma_model_selection(Data, Time, Factor, Tags, Colonization = 1,
-  Extinction = 1, Detectability_Value = 0.5, Phi_Time_0_Value = 0.5,
-  Tol = 1e-08, MIT = 100, C_MAX = 10, C_min = 0, E_MAX = 10,
-  E_min = 0, D_MAX = 0.99, D_min = 0, P_MAX = 0.99, P_min = 0.01,
-  I_0 = 0, I_1 = 1, I_2 = 2, I_3 = 3, z = 2, Verbose = 0,
-  MV_FLAG = 0.1, PerfectDetectability = TRUE)
+upgma_model_selection(
+  Data,
+  Time,
+  Factor,
+  Tags,
+  Colonization = 1,
+  Extinction = 1,
+  Detectability_Value = 0.5,
+  Phi_Time_0_Value = 0.5,
+  Tol = 1e-08,
+  MIT = 100,
+  C_MAX = 10,
+  C_min = 0,
+  E_MAX = 10,
+  E_min = 0,
+  D_MAX = 0.99,
+  D_min = 0,
+  P_MAX = 0.99,
+  P_min = 0.01,
+  I_0 = 0,
+  I_1 = 1,
+  I_2 = 2,
+  I_3 = 3,
+  z = 2,
+  Verbose = 0,
+  MV_FLAG = 0.1,
+  PerfectDetectability = TRUE
+)
 }
 \arguments{
 \item{Data}{data frame containing presence data per time (in cols) and sites (in rows)}
 
-\item{Time}{an array of length n containing sampling times}
+\item{Time}{an array of length n containing increasing sampling times}
 
 \item{Factor}{column number containing the 'data frame' factor used to split total data into level-based groups}
 
@@ -76,7 +98,7 @@ The function generates, as an output, a Sx6 matrix with the following 6 columns 
 partitions.
 }
 \details{
-The output matrix contains a row for the S different binary partitions of the set of S groups. 
+The output matrix contains a row for the S different binary partitions of the set of S groups.
 Searches are conducted using Nelder-Mead simplex method in a bounded parameter space which means that in case a
 neg loglikelihood (NLL) evaluation is called out from these boundaries, the returned value for this NLL
 evaluation is artifically given as the maximum number the machine can hold. The input is a data frame
@@ -95,18 +117,13 @@ the paremeter space defined by extinction, as the first axis, and colonization, 
 \dontrun{
 Data <- lakshadweepPLUS[[1]]
 Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
-Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002, 
-2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012, 
+Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
+2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012,
 2012, 2012, 2012, 2013, 2013, 2013, 2013))
-R <- upgma_model_selection(Data, Time, Factor = 3, Tags = Guild_Tag, 
+R <- upgma_model_selection(Data, Time, Factor = 3, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 Guild_Tag = c("Agt", "Kad", "Kvt")
-R <- upgma_model_selection(Data, Time, Factor = 2, Tags = Guild_Tag, 
+R <- upgma_model_selection(Data, Time, Factor = 2, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 }
 }
-\keyword{Akaike,}
-\keyword{colonization,}
-\keyword{detectability}
-\keyword{extinction,}
-\keyword{upgma,}

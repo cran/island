@@ -1,16 +1,16 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 library(island)
 
-## ----ibd demonstration, fig.height=5, fig.width=7------------------------
+## ----ibd demonstration, fig.height=5, fig.width=7-----------------------------
 set.seed(101100111)
 dynamic <- ibd_models(n0 = 50, beta = 0.3, delta = 0.3, mu = 0.01, K = 300, time_v = 0:50, type = "Alonso")
 plot(dynamic, type = "l", main = "Mainland-island model")
 
-## ---- carrying capacity, fig.height=5, fig.width=7-----------------------
+## ---- carrying capacity, fig.height=5, fig.width=7----------------------------
 ts <- 0:100 #Time-vector
 ccc <- seq(10, 100, 10) #Carrying capacities
 out <- NULL #Initializing output
@@ -33,7 +33,7 @@ legend(10, .35, legend=c("Colonization", "Extinction"),
        col=c("darkgreen", "magenta"), pch = 21, lty=1, pt.bg = "White",  cex=0.8)
 
 
-## ----detectability, fig.height=5, fig.width=7----------------------------
+## ----detectability, fig.height=5, fig.width=7---------------------------------
 ts <-  seq(0, 49, 7) #Time-vector
 ccc <- seq(10, 100, 10) #Carrying capacities
 out <- NULL

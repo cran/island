@@ -3,14 +3,16 @@
 \name{simberloff}
 \alias{simberloff}
 \title{Simberloff and Wilson original defaunation experiment data}
-\format{A list with 6 dataframes, each corresponding to the survey of a
+\format{
+A list with 6 dataframes, each corresponding to the survey of a
   different island. Dataframes have in columns: \describe{ \item{Taxa}{Taxa
   considered} \item{PRE}{Presence-absence before the defaunation process}
   \item{Integers (e.g. 21, 40, 58...)}{Several columns with presence-absence
   data for the day specified} \item{Tax. Unit 1}{Highest taxonomical unit
   considered} \item{Tax. Unit 2}{Second highest taxonomical unit considered}
   \item{Genera}{Genera of the identified taxon} \item{Island}{Island of
-  identification of the taxon} }}
+  identification of the taxon} }
+}
 \source{
 Simberloff, D. S., & Wilson, E. O.. (1969). Experimental Zoogeography
   of Islands: The Colonization of Empty Islands. \emph{Ecology},

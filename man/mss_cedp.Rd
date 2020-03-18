@@ -4,17 +4,40 @@
 \alias{mss_cedp}
 \title{Likelihood approach for esitmating colonization/extinction with perfect or imperfect detectability}
 \usage{
-mss_cedp(Data, Time, Factor, Tags, Colonization = 1, Extinction = 1,
-  Detectability_Value = 0.5, Phi_Time_0_Value = 0.5, Tol = 1e-08,
-  MIT = 100, C_MAX = 10, C_min = 0, E_MAX = 10, E_min = 0,
-  D_MAX = 0.99, D_min = 0, P_MAX = 0.99, P_min = 0.01, I_0 = 0,
-  I_1 = 1, I_2 = 2, I_3 = 3, z = 2, Minimization = 1,
-  Verbose = 0, MV_FLAG = 0.1, PerfectDetectability = TRUE)
+mss_cedp(
+  Data,
+  Time,
+  Factor,
+  Tags,
+  Colonization = 1,
+  Extinction = 1,
+  Detectability_Value = 0.5,
+  Phi_Time_0_Value = 0.5,
+  Tol = 1e-08,
+  MIT = 100,
+  C_MAX = 10,
+  C_min = 0,
+  E_MAX = 10,
+  E_min = 0,
+  D_MAX = 0.99,
+  D_min = 0,
+  P_MAX = 0.99,
+  P_min = 0.01,
+  I_0 = 0,
+  I_1 = 1,
+  I_2 = 2,
+  I_3 = 3,
+  z = 2,
+  Minimization = 1,
+  Verbose = 0,
+  MV_FLAG = 0.1,
+  PerfectDetectability = TRUE
+)
 }
 \arguments{
 \item{Data}{data frame containing presence data per time (in cols) and sites (in rows)}
 
-\item{Time}{an array of length n containing sampling times}
+\item{Time}{an array of length n containing increasing sampling times}
 
 \item{Factor}{column number containing the 'data frame' factor used to split total data into level-based groups}
 
@@ -69,7 +92,7 @@ mss_cedp(Data, Time, Factor, Tags, Colonization = 1, Extinction = 1,
 \description{
 \code{mss_cedp} conducts maximum likelihood estimation of colonization/extinction parameters
 of different data sets. This function can handle imperfect detectability and missing data
-defining a heterogeneous sampling structure across input data matrix rows. The function generates, 
+defining a heterogeneous sampling structure across input data matrix rows. The function generates,
 as an output, either a 3-column matrix (Colonization, Extinction, Negative LogLikelihood) or
 5-column matrix (Colonization, Extinction, Detectability, P_0, Negative LogLikelihood), depending
 on the value of the input parameter PerfectDetectability (either \code{TRUE} or \code{FALSE}).
@@ -95,17 +118,13 @@ by extinction, as the first axis, and colonization, as the second.
 \dontrun{
 Data <- lakshadweepPLUS[[1]]
 Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
-Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002, 
-2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012, 
+Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
+2002, 2003, 2003, 2003, 2003, 2010, 2010, 2011, 2011, 2011, 2011, 2012,
 2012, 2012, 2012, 2013, 2013, 2013, 2013))
-R <- mss_cedp(Data, Time, Factor = 3, Tags = Guild_Tag, 
+R <- mss_cedp(Data, Time, Factor = 3, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 Guild_Tag = c("Agt", "Kad", "Kvt")
-R <- mss_cedp(Data, Time, Factor = 2, Tags = Guild_Tag, 
+R <- mss_cedp(Data, Time, Factor = 2, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 }
 }
-\keyword{colonization,}
-\keyword{extinction}
-\keyword{likelihood,}
-\keyword{maximum}

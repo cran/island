@@ -1,4 +1,4 @@
-context("Testing rregular data sets")
+context("Testing regular data sets")
 
 test_that("regular", {
   sample_data <-

@@ -1,3 +1,7 @@
+# island 0.2.5
+* Completed citation.
+* Solved issues with unitary tests produced by by the new stringsAsFactors = F default. 
+
 # island 0.2.4
 * Memory leaks in C code solved.
 * Added DOI to citation.

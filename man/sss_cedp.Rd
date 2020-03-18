@@ -5,16 +5,37 @@
 \title{MacKenzie etal (2003) likelihood approach for estimating colonization/extinction
 parameters (with impecfect detectability)}
 \usage{
-sss_cedp(Data, Time, Transects, Colonization = 0.1, Extinction = 0.1,
-  Detectability = 0.99, Phi_Time_0 = 0.5, Tol = 1e-06, MIT = 100,
-  C_MAX = 2, C_min = 0, E_MAX = 2, E_min = 0, D_MAX = 0.999,
-  D_min = 0.001, P_MAX = 0.999, P_min = 0.001, I_0 = 0, I_1 = 1,
-  I_2 = 2, I_3 = 3, z = 4, Verbose = 0, Minimization = TRUE)
+sss_cedp(
+  Data,
+  Time,
+  Transects,
+  Colonization = 0.1,
+  Extinction = 0.1,
+  Detectability = 0.99,
+  Phi_Time_0 = 0.5,
+  Tol = 1e-06,
+  MIT = 100,
+  C_MAX = 2,
+  C_min = 0,
+  E_MAX = 2,
+  E_min = 0,
+  D_MAX = 0.999,
+  D_min = 0.001,
+  P_MAX = 0.999,
+  P_min = 0.001,
+  I_0 = 0,
+  I_1 = 1,
+  I_2 = 2,
+  I_3 = 3,
+  z = 4,
+  Verbose = 0,
+  Minimization = TRUE
+)
 }
 \arguments{
 \item{Data}{S x N matrix containing presence data per transect (in cols):}
 
-\item{Time}{an array of length n containing sampling times (without repetitions)}
+\item{Time}{an array of length n containing increasing sampling times (without repetitions)}
 
 \item{Transects}{an integer array of length n containing the number of transects per sampling time}
 
@@ -76,11 +97,11 @@ This is the reason why the minimum and maximum values for each axis should be gi
 as input arguments. The optimization procedure is the simplex method. A bounded
 parameter space implies that in case a neg loglikelihood (NLL) evaluation is
 required outside from these boundaries, the returned value for this NLL evaluation
-is artifically given as the maximum number the machine can hold. 
+is artifically given as the maximum number the machine can hold.
 The array Parameters (I_0, I_1, I_2, I_3) has to be a permutation of (0, 1, 3, 4).
-This parameter indeces along with the imput parameter 'z' are used to define a 
-subparameter space where the search will be conducted. If z = 2, then the search 
-will take place on the plane defined by model parameters (I_0, I_1). These indeces 
+This parameter indeces along with the imput parameter 'z' are used to define a
+subparameter space where the search will be conducted. If z = 2, then the search
+will take place on the plane defined by model parameters (I_0, I_1). These indeces
 are model parameter keys: colonization (0), extinction (1), detectability (2), and
 Phi_Time_0 (3). For instance, if (I_0, I_1, I_2, I_3) is (2, 3, 1, 0), and z = 2,
 then the search will take place whithin the subparemeter space defined by the
@@ -108,7 +129,3 @@ R1 <- sss_cedp(P1, Time_Vector, Transects,
                        Phi_Time_0=0.5,
                        Tol=1.0e-8, Verbose = 1)
 }
-\keyword{MacKenzie,}
-\keyword{colonization,}
-\keyword{extinction}
-\keyword{mle,}

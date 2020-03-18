@@ -3,7 +3,6 @@
 \docType{package}
 \name{island}
 \alias{island}
-\alias{island-package}
 \title{island: Stochastic Island Biogeography Theory Made Easy}
 \description{
 Tools to develop stochastic models based on the Theory of Island Biogeography
