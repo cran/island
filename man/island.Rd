@@ -3,6 +3,7 @@
 \docType{package}
 \name{island}
 \alias{island}
+\alias{island-package}
 \title{island: Stochastic Island Biogeography Theory Made Easy}
 \description{
 Tools to develop stochastic models based on the Theory of Island Biogeography
@@ -44,8 +45,8 @@ Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R..
   Letters}, \bold{18}, 451--461. \cr \cr Simberloff, D. S., and Wilson, E.
   O.. (1969). Experimental Zoogeography of Islands: The Colonization of Empty
   Islands. \emph{Ecology}, \bold{50(2)}, 278--296.
-  \url{http://doi.org/10.2307/1934856} \cr \cr Simberloff, D. S.. (1969).
+  \url{https://doi.org/10.2307/1934856} \cr \cr Simberloff, D. S.. (1969).
   Experimental Zoogeography of Islands: A Model for Insular Colonization.
   \emph{Ecology}, \bold{50(2)}, 296--314.
-  \url{http://doi.org/10.2307/1934857}
+  \url{https://doi.org/10.2307/1934857}
 }

@@ -1,4 +1,4 @@
-## ----setup, include = FALSE---------------------------------------------------
+## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -14,23 +14,23 @@ text(x = 3, y = 16, "near")
 text(x = 9, y = 8, "large")
 text(x = 8, y = 16, "small")
 
-## ---- echo = F----------------------------------------------------------------
+## ---- echo = F-----------------------------------------------------------
 library(island)
 data(alonso15)
 knitr::kable(head(alonso15[[2]]))
 
-## ---- echo = F----------------------------------------------------------------
+## ---- echo = F-----------------------------------------------------------
 library(island)
 data(simberloff)
 knitr::kable(head(simberloff[[2]][, -(6:14)]))
 
-## ---- echo = F----------------------------------------------------------------
+## ---- echo = F-----------------------------------------------------------
 set.seed(10110111)
 df <- data.frame(Sp. = LETTERS[1:10], "1" = sample(c(0,1), 10, replace = T, prob = c(.6, .4)), "2" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)), "3" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)))
 colnames(df)[2:4] <- 1:3
 knitr::kable(df)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 ### LIKELIHOOD
 0.4^3 * 0.6^4 * 0.7^10 * 0.3^3
 # This is a pretty small likelihood. We can easily transform this likelihood into log-likelihood.
@@ -40,27 +40,27 @@ knitr::kable(df)
 # This is the log-likelihood associated with the given set of transition probabilities. Notice that we obtain the same value with both approaches.
 log(0.4^3 * 0.6^4 * 0.7^10 * 0.3^3)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 c_and_e <- regular_sampling_scheme(x = df, vector = 2:4)
 c_and_e
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 cetotrans(c = c_and_e[1], e = c_and_e[4])
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 data("alonso15")
 df <- alonso15[[2]]
 knitr::kable(head(df))
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 rates <- regular_sampling_scheme(x = df, vector = 3:6)
 rates
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 rates_g <- regular_sampling_scheme(x = df, vector = 3:6, level = "Guild", n = 5)
 rates_g
 
-## ----confidence intervals-----------------------------------------------------
+## ----confidence intervals------------------------------------------------
 rates2a <- regular_sampling_scheme(x = df, vector = 3:6, CI = T)
 rates2a
 
@@ -80,7 +80,7 @@ NLLs <- NLL_rss(x = df, vector = 3:6, c = seqs * rates$c, e = rates$e)
 plot(seqs * rates$c, NLLs, type = "l", xlab = "Colonization rate (year⁻¹)", ylab = "Negative Log-Likelihood", main = "Likelihood profile")
 points(rates$c, rates$NLL, pch = 4, col = "magenta")
 
-## ----model selection----------------------------------------------------------
+## ----model selection-----------------------------------------------------
 guild_NLL <- sum(rates2c$NLL)
 guild_NLL
 comm_NLL <- rates$NLL
@@ -94,7 +94,7 @@ aic_c
 ms_kadmat <- data.frame(Model = c("Guilds", "Community"), AIC = c(aic_g, aic_c))
 weight_of_evidence(data = ms_kadmat)
 
-## ----Simulation Kadmat--------------------------------------------------------
+## ----Simulation Kadmat---------------------------------------------------
 ### First, take a look at the rates for Kadmat
 tp <- cetotrans(c = rates$c, e = rates$e)
 
@@ -116,7 +116,7 @@ lines(2001:2011, ic[1, ], col = "red", lty = 2)
 lines(2001:2011, ic[2, ], col = "red", lty = 2)
 
 
-## ----Model error--------------------------------------------------------------
+## ----Model error---------------------------------------------------------
 simulated <- apply(sims, 1, quantile, 0.5)
 simulated 
 
@@ -131,7 +131,7 @@ observed <- observed[-1]
 r_squared(observed = observed, simulated = simulated, sp = 156)
 
 
-## ---- echo = F----------------------------------------------------------------
+## ---- echo = F-----------------------------------------------------------
 knitr::kable(head(simberloff[[6]][, -(6:13)]))
 
 ## ----Single parameters, fig.align = 'center', fig.height = 4.5, fig.width = 6, fig.caption = T, fig.cap = "Colonization and extinction rates for the whole invertebrate community or selected taxonomic groups in island ST2."----
@@ -193,7 +193,7 @@ text(locs, c("TIB", as.character(rates.islands$Group), substr(rates.taxonomy[, 1
      col = c("black", rep("magenta", 6), rep("green", 8)))
 
 
-## ----alonso15 model selection-------------------------------------------------
+## ----alonso15 model selection--------------------------------------------
 data(alonso15)
 head(alonso15[[2]]) # Examine the data
 
@@ -268,7 +268,7 @@ lines(c(2000:2011), c(7, sims.ic[1, ]), lty = 2)
 lines(c(2000:2011), c(7, sims.ic[2, ]), lty = 2)
 
 
-## ----environmental fit, warning = F-------------------------------------------
+## ----environmental fit, warning = F--------------------------------------
 data(idaho)
 df <- idaho[[1]]
 env <- idaho[[2]]

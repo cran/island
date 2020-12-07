@@ -19,6 +19,8 @@ fi
 AC_MSG_CHECKING([if GSL version >= 1.12])
 AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <gsl/gsl_version.h>
 int main() {
 #ifdef GSL_VERSION

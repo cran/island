@@ -1,6 +1,10 @@
+# island 0.2.6
+* Solved configure problems produced by the updated toolchain in OS systems.
+* Corrected several URLs.
+
 # island 0.2.5
 * Completed citation.
-* Solved issues with unitary tests produced by by the new stringsAsFactors = F default. 
+* Solved issues with unitary tests produced by the new stringsAsFactors = F default. 
 
 # island 0.2.4
 * Memory leaks in C code solved.

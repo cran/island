@@ -5,19 +5,9 @@
 \alias{NLL_isd}
 \title{c/e rates for irregular samplings in a dataset}
 \usage{
-irregular_single_dataset(
-  dataframe,
-  vector,
-  c,
-  e,
-  column = NULL,
-  n = NULL,
-  step = NULL,
-  assembly = F,
-  jacobian = F,
-  verbose = F,
-  CI = F
-)
+irregular_single_dataset(dataframe, vector, c, e, column = NULL,
+  n = NULL, step = NULL, assembly = F, jacobian = F, verbose = F,
+  CI = F)
 
 NLL_isd(dataframe, vector, c, e, assembly = F)
 }

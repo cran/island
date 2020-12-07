@@ -3,14 +3,12 @@
 \name{alonso15}
 \alias{alonso15}
 \title{Lakshadweep Archipelago coral fish community reassembly}
-\format{
-A list with 3 dataframes, each corresponding to the survey of a
+\format{A list with 3 dataframes, each corresponding to the survey of a
   different atoll. Dataframes have in columns: \describe{ \item{Species}{Name
   of the species found} \item{Trophic.Level}{A number indicating the trophic
   level of the surveyed species} \item{Presence-absence data}{Several columns
   with letters (indicating the atoll surveyed) and the year in which the
-  surveys were done} \item{Guild}{Guild of the surveyed species} }
-}
+  surveys were done} \item{Guild}{Guild of the surveyed species} }}
 \source{
 Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R.. (2015)
   Fish community reassembly after a coral mass mortality: higher trophic

@@ -27,7 +27,7 @@
 #' @references Zachmann, L., Moffet, C., and Adler, P.. (2010). Mapped quadrats
 #'   in sagebrush steppe long-term data for analyzing demographic rates and
 #'   plant-plant interactions. \emph{Ecology},  \bold{91(11)}, 3427--3427.
-#'   \url{http://doi.wiley.com/10.1890/10-0404.1}
+#'   \url{https://doi.wiley.com/10.1890/10-0404.1}
 #'
 #' @source
 #' \url{https://knb.ecoinformatics.org/#view/doi:10.5063/AA/lzachmann.6.36}

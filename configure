@@ -38,7 +38,7 @@ export as_nl
 as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-# Prefer a ksh shell builtin over an external Rprintf program on Solaris,
+# Prefer a ksh shell builtin over an external printf program on Solaris,
 # but without wasting forks for bash or zsh.
 if test -z "$BASH_VERSION$ZSH_VERSION" \
     && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then
@@ -2632,6 +2632,8 @@ else
 /* end confdefs.h.  */
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <gsl/gsl_version.h>
 int main() {
 #ifdef GSL_VERSION
@@ -2866,7 +2868,7 @@ export as_nl
 as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-# Prefer a ksh shell builtin over an external Rprintf program on Solaris,
+# Prefer a ksh shell builtin over an external printf program on Solaris,
 # but without wasting forks for bash or zsh.
 if test -z "$BASH_VERSION$ZSH_VERSION" \
     && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then

@@ -3,8 +3,7 @@
 \name{idaho}
 \alias{idaho}
 \title{Mapped plant community time series, Dubois, ID}
-\format{
-A list with 2 dataframes, one corresponding to the presence-absence
+\format{A list with 2 dataframes, one corresponding to the presence-absence
   data and the other to the environmental variables. The first dataframe has
   in columns: \describe{ \item{quad}{Name of the quadrat surveyed}
   \item{species}{Name of the species found} \item{Presence-absence
@@ -13,8 +12,7 @@ A list with 2 dataframes, one corresponding to the presence-absence
   in which surveys were conducted} \item{Environmental variables}{Data of the
   recorded environmental variables in the form XXX.YYY, where XXX denotes a
   month (or a total) and YYY can refer to snow (in inches), temperature
-  (fahrenheit degrees) or precipitation (in inches)}}
-}
+  (fahrenheit degrees) or precipitation (in inches)}}}
 \source{
 \url{https://knb.ecoinformatics.org/#view/doi:10.5063/AA/lzachmann.6.36}
 }
@@ -38,5 +36,5 @@ Only quadrats Q1, Q2, Q3, Q4, Q5, Q6, Q25 and Q26 are included here.
 Zachmann, L., Moffet, C., and Adler, P.. (2010). Mapped quadrats
   in sagebrush steppe long-term data for analyzing demographic rates and
   plant-plant interactions. \emph{Ecology},  \bold{91(11)}, 3427--3427.
-  \url{http://doi.wiley.com/10.1890/10-0404.1}
+  \url{https://doi.wiley.com/10.1890/10-0404.1}
 }

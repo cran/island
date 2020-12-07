@@ -3,20 +3,18 @@
 \name{simberloff}
 \alias{simberloff}
 \title{Simberloff and Wilson original defaunation experiment data}
-\format{
-A list with 6 dataframes, each corresponding to the survey of a
+\format{A list with 6 dataframes, each corresponding to the survey of a
   different island. Dataframes have in columns: \describe{ \item{Taxa}{Taxa
   considered} \item{PRE}{Presence-absence before the defaunation process}
   \item{Integers (e.g. 21, 40, 58...)}{Several columns with presence-absence
   data for the day specified} \item{Tax. Unit 1}{Highest taxonomical unit
   considered} \item{Tax. Unit 2}{Second highest taxonomical unit considered}
   \item{Genera}{Genera of the identified taxon} \item{Island}{Island of
-  identification of the taxon} }
-}
+  identification of the taxon} }}
 \source{
 Simberloff, D. S., & Wilson, E. O.. (1969). Experimental Zoogeography
   of Islands: The Colonization of Empty Islands. \emph{Ecology},
-  \bold{50(2)}, 278--296. \url{http://doi.org/10.2307/1934856}
+  \bold{50(2)}, 278--296. \url{https://doi.org/10.2307/1934856}
 }
 \description{
 A list of datasets containing the presence-absence data gathered originally
@@ -47,11 +45,11 @@ Wilson, E. O.. (2010). Island Biogeography in the 1960s: THEORY
   of Island Biogeography Revisited} (pp. 1--12). Princeton University Press.
   \cr \cr Simberloff, D. S., and Wilson, E. O.. (1969). Experimental
   Zoogeography of Islands: The Colonization of Empty Islands. \emph{Ecology},
-  \bold{50(2)}, 278--296. \url{http://doi.org/10.2307/1934856} \cr \cr
+  \bold{50(2)}, 278--296. \url{https://doi.org/10.2307/1934856} \cr \cr
   Wilson, E. O., and Simberloff, D. S.. (1969). Experimental Zoogeography of
   Islands: Defaunation and Monitoring Techniques. \emph{Ecology},
-  \bold{50(2)}, 267--278. \url{http://doi.org/10.2307/1934855} \cr \cr
+  \bold{50(2)}, 267--278. \url{https://doi.org/10.2307/1934855} \cr \cr
   Simberloff, D. S.. (1969). Experimental Zoogeography of Islands: A Model
   for Insular Colonization. \emph{Ecology}, \bold{50(2)}, 296--314.
-  \url{http://doi.org/10.2307/1934857}
+  \url{https://doi.org/10.2307/1934857}
 }
