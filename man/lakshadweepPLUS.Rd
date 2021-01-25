@@ -3,13 +3,15 @@
 \name{lakshadweepPLUS}
 \alias{lakshadweepPLUS}
 \title{Lakshadweep Archipelago coral fish community reassembly data in a single data frame}
-\format{A list of a single dataframe with data from the 3 different 
+\format{
+A list of a single dataframe with data from the 3 different 
   atoll. The dataframe has in columns: \describe{ \item{Species}{Name
   of the species found} \item{Atoll}{Atoll surveyed} \item{Guild}{Feeding  
   strategy of the surveyed species} \item{Presence-absence data}{Several columns 
   corresponding to the year in which the surveys were done. Year repetition means
   repeated sampling of the same atoll at the same time. Presences are represented
-  by 1 and true absencestrue or undetected presences by 0.} }}
+  by 1 and true absencestrue or undetected presences by 0.} }
+}
 \source{
 Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R.. (2015)
   Fish community reassembly after a coral mass mortality: higher trophic

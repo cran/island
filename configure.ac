@@ -10,7 +10,7 @@ AC_PATH_PROG([GSL_CONFIG], [gsl-config])
 ## If gsl-config was found, let's use it
 if test "${GSL_CONFIG}" != ""; then
    # Use gsl-config for header and linker arguments
-   GSL_CFLAGS=`${GSL_CONFIG} --cflags`
+   GSL_CFLAGS=`${GSL_CONFIG} --cflags -I/opt/R/arm64/include`
    GSL_LIBS=`${GSL_CONFIG} --libs`
 else
    AC_MSG_ERROR([gsl-config not found, is GSL installed?])
@@ -25,7 +25,7 @@ AC_RUN_IFELSE([AC_LANG_SOURCE([[
 int main() {
 #ifdef GSL_VERSION
    int major, minor;
-   char *gslv = GSL_VERSION;
+   const char *gslv = GSL_VERSION;
    if ((sscanf(gslv, "%d.%d", &major, &minor)) != 2) {
      exit (1);
    }

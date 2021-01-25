@@ -5,9 +5,19 @@
 \alias{NLL_imd}
 \title{c/e rates for irregular samplings in multiple datasets}
 \usage{
-irregular_multiple_datasets(list, vectorlist, c, e, column = NULL,
-  n = NULL, step = NULL, assembly = F, jacobian = F, verbose = F,
-  CI = F)
+irregular_multiple_datasets(
+  list,
+  vectorlist,
+  c,
+  e,
+  column = NULL,
+  n = NULL,
+  step = NULL,
+  assembly = F,
+  jacobian = F,
+  verbose = F,
+  CI = F
+)
 
 NLL_imd(list, vectorlist, c, e, assembly = F)
 }

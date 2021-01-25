@@ -1,3 +1,7 @@
+# island 0.2.7
+* Solved configure problems produced by the updated toolchain in OS systems.
+* Changed URLs to doi.
+
 # island 0.2.6
 * Solved configure problems produced by the updated toolchain in OS systems.
 * Corrected several URLs.
