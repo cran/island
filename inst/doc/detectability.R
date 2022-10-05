@@ -44,13 +44,14 @@ ce_est0.4[i,] <- c(rrr[1], rrr[2])
 }
 
 #Plotting
+old.par <- par("mfrow")
 par(mfrow=c(1, 2))
 plot(ce[, 1], ce_est0.4[, 1], xlab = "True Colonization", ylab = "Estimated Colonization", pch = 20)
 title(sub="d = 0.4")
 plot(ce[, 1], ce_est0.95[, 1], xlab = "True Colonization", ylab = "", pch = 20)
 title(sub="d = 0.95")
 
-
+par(mfrow = old.par)
 
 ## ---- echo = F----------------------------------------------------------------
 knitr::kable(head(lakshadweepPLUS[[1]][, 1:9]))

@@ -5,7 +5,14 @@
 \alias{NLL_rss}
 \title{c/e rates for a regular sampling scheme}
 \usage{
-regular_sampling_scheme(x, vector, level = NULL, n = NULL, step = NULL, CI = F)
+regular_sampling_scheme(
+  x,
+  vector,
+  level = NULL,
+  n = NULL,
+  step = NULL,
+  CI = FALSE
+)
 
 NLL_rss(x, vector, c, e)
 }

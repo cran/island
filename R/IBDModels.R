@@ -4,7 +4,7 @@
 #' inmigration, birth and death models.
 #'
 #' We have included three different stochastic models: Kendall (1948) seminal
-#' work, Alonso \& McKane (2002) mainland-island model and Haegeman \& Loreau
+#' work, Alonso & McKane (2002) mainland-island model, and Haegeman & Loreau
 #' (2010) basic population model with denso-dependent deaths. These models are
 #' different formulations of a population dynamics with three basic processes:
 #' birth, death and inmigration of individuals. For the specifics, please refer
@@ -23,7 +23,7 @@
 #' ibd_models(n0 = 0, beta = 0.4, delta = 0.3, mu = 0.1, K = 30,
 #' time_v = 0:20, type = "Alonso")
 #'
-#' @note Haegeman \& Loreau model specification breaks for high values of
+#' @note Haegeman & Loreau model specification breaks for high values of
 #'   \code{n0} when the birth rate is lower than the death rate.
 #'
 #' @return A data.frame with two columns: one with the time vector and the other

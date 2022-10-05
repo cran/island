@@ -1,9 +1,16 @@
-# island 0.2.7
+# island 0.2.8
 * Solved configure problems produced by the updated toolchain in OS systems.
+* Solved special characters escaping.
+* Improved DESCRIPTION. 
+* Added Value field to several functions. 
+* Replaced \dontrun with \donttest for several functions.
+* Minor corrections in the manual and vignettes.
+* Used TRUE and FALSE instead of T and F in arguments descriptions.
+
+# island 0.2.7
 * Changed URLs to doi.
 
 # island 0.2.6
-* Solved configure problems produced by the updated toolchain in OS systems.
 * Corrected several URLs.
 
 # island 0.2.5

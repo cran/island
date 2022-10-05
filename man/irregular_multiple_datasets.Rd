@@ -13,13 +13,13 @@ irregular_multiple_datasets(
   column = NULL,
   n = NULL,
   step = NULL,
-  assembly = F,
-  jacobian = F,
-  verbose = F,
-  CI = F
+  assembly = FALSE,
+  jacobian = FALSE,
+  verbose = FALSE,
+  CI = FALSE
 )
 
-NLL_imd(list, vectorlist, c, e, assembly = F)
+NLL_imd(list, vectorlist, c, e, assembly = FALSE)
 }
 \arguments{
 \item{list}{A list of dataframes.}
@@ -70,7 +70,7 @@ The columns with the presence-absence data should have the day of that
 \examples{
 irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17,
 3:19, 3:17, 3:16), 0.001, 0.001)
-\dontrun{
+\donttest{
 irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
  3:16), 0.001, 0.001, "Tax. Unit 1", n = 13)
 irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,

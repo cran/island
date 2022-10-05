@@ -86,16 +86,18 @@ upgma_model_selection(
 
 \item{PerfectDetectability}{TRUE means 'Perfect Detectability'. Of course, FALSE means 'Imperfect Detectability'}
 }
+\value{
+The function generates, as an output, a Sx6 matrix with the following 6 columns (for the S different partitions):
+(No of Model Parameters, NLL, AIC, AIC_c, AIC_d, AIC_w) which compares all upgma-generarated
+partitions. It also produces two .tex files in the working directory containing tables of the best grouping and a summary of the model selection process.
+}
 \description{
 \code{upgma_model_selection} function conducts a model selection procedure intended to find an optimal
 partition that mimimize AIC values. Maximum likelihood estimation of model parameters
 (Colonization, Extinction) or (Colonization, Extinction, Detectability, P_0) is performed
 assuming either perfect detectability or imperfect detectability, respectively. In the latter case,
 the input data frame should contain multiple transects per sampling time. This function can handle
- missing data defining a heterogeneous sampling structure across the rows of the input data matrix.
-The function generates, as an output, a Sx6 matrix with the following 6 columns (for the S diffirent partitions)):
-(No of Model Parameters, NLL, AIC, AIC_c, AIC_d, AIC_w) which compares all upgma-generarated
-partitions.
+missing data defining a heterogeneous sampling structure across the rows of the input data matrix.
 }
 \details{
 The output matrix contains a row for the S different binary partitions of the set of S groups.
@@ -126,4 +128,5 @@ Guild_Tag = c("Agt", "Kad", "Kvt")
 R <- upgma_model_selection(Data, Time, Factor = 2, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 }
+
 }

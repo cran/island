@@ -7,13 +7,13 @@
 \alias{greedy_environmental_fit}
 \title{Environmental fit for a single dataset}
 \usage{
-all_environmental_fit(dataset, vector, env, c, e, aic, verbose = F)
+all_environmental_fit(dataset, vector, env, c, e, aic, verbose = FALSE)
 
 custom_environmental_fit(dataset, vector, params, c_expression, e_expression)
 
 NLL_env(dataset, vector, params, c_expression, e_expression)
 
-greedy_environmental_fit(dataset, vector, env, c, e, aic, verbose = F)
+greedy_environmental_fit(dataset, vector, env, c, e, aic, verbose = FALSE)
 }
 \arguments{
 \item{dataset}{A single dataset.}
@@ -70,7 +70,7 @@ AIC is recommended to be higher than the AIC of the most simple model
   (i.e. not including environmental variables).
 }
 \examples{
-\dontrun{
+\donttest{
 all_environmental_fit(idaho[[1]],3:23,c("idaho[[2]]$TOTAL.ppt",
 "idaho[[2]]$ANNUAL.temp"),0.13,0.19,100000)
 greedy_environmental_fit(idaho[[1]],3:23,c("idaho[[2]]$TOTAL.ppt",

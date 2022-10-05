@@ -1,5 +1,5 @@
 #' MacKenzie etal (2003) likelihood approach for estimating colonization/extinction
-#' parameters (with impecfect detectability)
+#' parameters (with imperfect detectability)
 #'
 #' \code{sss_cedp} conducts a maximum likelihood estimation of model parameters
 #' (Colonization, Extinction, Detectability, and Phi_Time_0) of MacKenzie et al
@@ -74,6 +74,9 @@
 #'                        Colonization=0.5, Extinction=0.5, Detectability=0.5,
 #'                        Phi_Time_0=0.5,
 #'                        Tol=1.0e-8, Verbose = 1)
+#'
+#' @return A list with five components (Colonization, Extinction, Detectability,
+#' P_0, and Negative Log-Likelihood).
 
 sss_cedp <- function( Data, Time, Transects,
                              Colonization = 0.1, Extinction   = 0.1,

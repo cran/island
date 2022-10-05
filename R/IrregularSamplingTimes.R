@@ -29,7 +29,7 @@
 #' @examples irregular_single_dataset(simberloff[[1]], 3:17, 0.001, 0.001)
 #' irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 #' 0.001, 0.001, 3)
-#' \dontrun{
+#' \donttest{
 #' irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 #' 0.001, 0.001, 3, 0.00001)
 #' }
@@ -40,7 +40,8 @@
 #'   have been calculated. \code{NLL_isd} gives the NLL for a single dataset in
 #'   an irregular sampling scheme given a specific c and e.
 irregular_single_dataset <- function(dataframe, vector, c, e, column = NULL,
-            n = NULL, step = NULL, assembly = F, jacobian = F, verbose = F, CI=F) {
+            n = NULL, step = NULL, assembly = FALSE, jacobian = FALSE,
+            verbose = FALSE, CI = FALSE) {
 
   if (is.null(column)) {
     wrapper(dataset = dataframe, vector = vector, c = c, e = e, step = step,
@@ -54,7 +55,7 @@ irregular_single_dataset <- function(dataframe, vector, c, e, column = NULL,
 #' @rdname irregular_single_dataset
 #' @export
 
-NLL_isd <- function(dataframe, vector, c, e, assembly = F){
+NLL_isd <- function(dataframe, vector, c, e, assembly = FALSE){
 
   co <- incounts(dataframe, vector, assembly)
   t <- times(dataframe, vector, assembly)
@@ -95,7 +96,7 @@ NLL_isd <- function(dataframe, vector, c, e, assembly = F){
 #'   extinction.
 #' @examples irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17,
 #' 3:19, 3:17, 3:16), 0.001, 0.001)
-#' \dontrun{
+#' \donttest{
 #' irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
 #'  3:16), 0.001, 0.001, "Tax. Unit 1", n = 13)
 #' irregular_multiple_datasets(simberloff, list(3:17, 3:18, 3:17, 3:19, 3:17,
@@ -109,7 +110,8 @@ NLL_isd <- function(dataframe, vector, c, e, assembly = F){
 #'   multiple datasets with irregular sampling schemes given a specific c and e.
 
 irregular_multiple_datasets <- function(list, vectorlist, c, e, column = NULL,
-           n = NULL, step = NULL, assembly = F, jacobian = F, verbose = F, CI = F) {
+           n = NULL, step = NULL, assembly = FALSE, jacobian = FALSE,
+           verbose = FALSE, CI = FALSE) {
 
   if (is.null(column)) {
     wrapper2(list, vectorlist, c, e, step, assembly, jacobian, verbose, CI)
@@ -122,7 +124,7 @@ irregular_multiple_datasets <- function(list, vectorlist, c, e, column = NULL,
 #' @rdname irregular_multiple_datasets
 #' @export
 
-NLL_imd <- function(list, vectorlist, c, e, assembly = F){
+NLL_imd <- function(list, vectorlist, c, e, assembly = FALSE){
 
   time <- vector("list", length(list))
   abs  <- vector("list", length(list))

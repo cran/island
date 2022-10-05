@@ -1,11 +1,8 @@
-#' Likelihood approach for esitmating colonization/extinction with perfect or imperfect detectability
+#' Likelihood approach for estimating colonization/extinction with perfect or imperfect detectability
 #'
 #' \code{mss_cedp} conducts maximum likelihood estimation of colonization/extinction parameters
 #' of different data sets. This function can handle imperfect detectability and missing data
-#' defining a heterogeneous sampling structure across input data matrix rows. The function generates,
-#' as an output, either a 3-column matrix (Colonization, Extinction, Negative LogLikelihood) or
-#' 5-column matrix (Colonization, Extinction, Detectability, P_0, Negative LogLikelihood), depending
-#' on the value of the input parameter PerfectDetectability (either \code{TRUE} or \code{FALSE}).
+#' defining a heterogeneous sampling structure across input data matrix rows.
 #'
 ## Details:
 #' The input is a data frame containing presence data per time (in cols).  Different factors (for instance,
@@ -55,7 +52,7 @@
 #' @export
 #' @examples
 ## Example (Lakshadweep Islands --- Imperfect Detectability)
-#' \dontrun{
+#' \donttest{
 #' Data <- lakshadweepPLUS[[1]]
 #' Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
 #' Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
@@ -67,6 +64,10 @@
 #' R <- mss_cedp(Data, Time, Factor = 2, Tags = Guild_Tag,
 #' PerfectDetectability = FALSE, z = 4)
 #' }
+#'
+#' @return The function generates, as an output, either a 3-column matrix (Colonization, Extinction, Negative LogLikelihood) or
+#' 5-column matrix (Colonization, Extinction, Detectability, P_0, Negative LogLikelihood), depending
+#' on the value of the input parameter PerfectDetectability (either \code{TRUE} or \code{FALSE}).
 
 mss_cedp <- function( Data, Time, Factor, Tags,
                        Colonization = 1.0, Extinction = 1.0,

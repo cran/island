@@ -2,7 +2,7 @@
 % Please edit documentation in R/da_mle_cedp.R
 \name{mss_cedp}
 \alias{mss_cedp}
-\title{Likelihood approach for esitmating colonization/extinction with perfect or imperfect detectability}
+\title{Likelihood approach for estimating colonization/extinction with perfect or imperfect detectability}
 \usage{
 mss_cedp(
   Data,
@@ -89,13 +89,15 @@ mss_cedp(
 
 \item{PerfectDetectability}{TRUE means 'Perfect Detectability'. Of course, FALSE means 'Imperfect Detectability'}
 }
+\value{
+The function generates, as an output, either a 3-column matrix (Colonization, Extinction, Negative LogLikelihood) or
+5-column matrix (Colonization, Extinction, Detectability, P_0, Negative LogLikelihood), depending
+on the value of the input parameter PerfectDetectability (either \code{TRUE} or \code{FALSE}).
+}
 \description{
 \code{mss_cedp} conducts maximum likelihood estimation of colonization/extinction parameters
 of different data sets. This function can handle imperfect detectability and missing data
-defining a heterogeneous sampling structure across input data matrix rows. The function generates,
-as an output, either a 3-column matrix (Colonization, Extinction, Negative LogLikelihood) or
-5-column matrix (Colonization, Extinction, Detectability, P_0, Negative LogLikelihood), depending
-on the value of the input parameter PerfectDetectability (either \code{TRUE} or \code{FALSE}).
+defining a heterogeneous sampling structure across input data matrix rows.
 }
 \details{
 The input is a data frame containing presence data per time (in cols).  Different factors (for instance,
@@ -115,7 +117,7 @@ parameters. For instance, if (I_0, I_1) is (1, 0), the search will take place wh
 by extinction, as the first axis, and colonization, as the second.
 }
 \examples{
-\dontrun{
+\donttest{
 Data <- lakshadweepPLUS[[1]]
 Guild_Tag = c("Alg", "Cor", "Mac", "Mic", "Omn", "Pis", "Zoo")
 Time <- as.vector(c(2000, 2000, 2001, 2001, 2001, 2001, 2002, 2002, 2002,
@@ -127,4 +129,5 @@ Guild_Tag = c("Agt", "Kad", "Kvt")
 R <- mss_cedp(Data, Time, Factor = 2, Tags = Guild_Tag,
 PerfectDetectability = FALSE, z = 4)
 }
+
 }

@@ -62,13 +62,14 @@ ce_est0.4[i,] <- c(rrr[1], rrr[2])
 }
 
 #Plotting
+old.par <- par("mfrow")
 par(mfrow=c(1, 2))
 plot(ce[, 1], ce_est0.4[, 1], xlab = "True Colonization", ylab = "Estimated Colonization", pch = 20)
 title(sub="d = 0.4")
 plot(ce[, 1], ce_est0.95[, 1], xlab = "True Colonization", ylab = "", pch = 20)
 title(sub="d = 0.95")
 
-
+par(mfrow = old.par)
 ```
 
 MacKenzie (2003) presents a likelihood function to estimate site occupancy, colonization, and local extinction when a species is detected imperfectly. The method relies on replicate observations per sampling time. The implementation of this likelihood is not trivial because there might be several underlying colonization-extinction trajectories that are compatible with the same observed detection history. For example, a detection history such as $\lbrace 101 \ 100 \rbrace$ means that in the first sampling time we have three replicates, $101$, where we detected our hypothetical species twice, and a second sampling time, where we observed $100$, this is, we detected the species only once. Since we detected it at least once at both time 0 and time 1, there is only one underlying colonization-extinction trajectory compatible with it, which, we take the convention of collapsing it into $( 1 \ 1 )$. However, imagine we fail to detect the species at time 1, being then our detection history $\lbrace 101 \ 000 \rbrace$. In this case, there are two underlying trajectories that are both compatible with this observation, since the species could have or could have not gone extinct at time 1. These are $( 1 \ 1 )$ and $( 1 \ 0 )$.  Therefore, the probability of the observed detection history $\lbrace 101 \ 000 \rbrace$ should sum over the two ways in which that detection history could have been observed, either through the trajectory $(1 \ 1 )$ or $(1 \ 0)$. For simplicity, let us analyse first what is the probability for the observed detection history $\lbrace 101 \ 100 \rbrace$. The first sampling time always considers the probability of the species being present at the site, $P_0$, as the fourth model parameter, and given that, the probability of making two out of three possible detections, $d^2·(1-d)$. The probability of being also present at the time 1 given that the species was present at time 0 is given by $T_{11}$, and given that, the probability of making only one out three possible detections is $d · (1-d)^2$, where $d$ is the detectability *per* replicate or probability of detecting a species when is present per observation. Taking all together, this leads us to the following probability for the full detection history:

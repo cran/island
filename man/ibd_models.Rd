@@ -32,14 +32,14 @@ inmigration, birth and death models.
 }
 \details{
 We have included three different stochastic models: Kendall (1948) seminal
-work, Alonso \& McKane (2002) mainland-island model and Haegeman \& Loreau
+work, Alonso & McKane (2002) mainland-island model, and Haegeman & Loreau
 (2010) basic population model with denso-dependent deaths. These models are
 different formulations of a population dynamics with three basic processes:
 birth, death and inmigration of individuals. For the specifics, please refer
 to the original articles.
 }
 \note{
-Haegeman \& Loreau model specification breaks for high values of
+Haegeman & Loreau model specification breaks for high values of
   \code{n0} when the birth rate is lower than the death rate.
 }
 \examples{

@@ -13,13 +13,13 @@ irregular_single_dataset(
   column = NULL,
   n = NULL,
   step = NULL,
-  assembly = F,
-  jacobian = F,
-  verbose = F,
-  CI = F
+  assembly = FALSE,
+  jacobian = FALSE,
+  verbose = FALSE,
+  CI = FALSE
 )
 
-NLL_isd(dataframe, vector, c, e, assembly = F)
+NLL_isd(dataframe, vector, c, e, assembly = FALSE)
 }
 \arguments{
 \item{dataframe}{A single dataframe.}
@@ -70,7 +70,7 @@ The columns with the presence-absence data should have the day of that
 irregular_single_dataset(simberloff[[1]], 3:17, 0.001, 0.001)
 irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 0.001, 0.001, 3)
-\dontrun{
+\donttest{
 irregular_single_dataset(simberloff[[1]], 3:17, column = "Tax. Unit 1",
 0.001, 0.001, 3, 0.00001)
 }

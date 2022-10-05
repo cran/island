@@ -5,10 +5,8 @@
 #' (Colonization, Extinction) or (Colonization, Extinction, Detectability, P_0) is performed
 #' assuming either perfect detectability or imperfect detectability, respectively. In the latter case,
 #' the input data frame should contain multiple transects per sampling time. This function can handle
-#'  missing data defining a heterogeneous sampling structure across the rows of the input data matrix.
-#' The function generates, as an output, a Sx6 matrix with the following 6 columns (for the S diffirent partitions)):
-#' (No of Model Parameters, NLL, AIC, AIC_c, AIC_d, AIC_w) which compares all upgma-generarated
-#' partitions.
+#' missing data defining a heterogeneous sampling structure across the rows of the input data matrix.
+#'
 #'
 ## Details:
 #' The output matrix contains a row for the S different binary partitions of the set of S groups.
@@ -68,6 +66,11 @@
 #' R <- upgma_model_selection(Data, Time, Factor = 2, Tags = Guild_Tag,
 #' PerfectDetectability = FALSE, z = 4)
 #' }
+#'
+#' @return The function generates, as an output, a Sx6 matrix with the following 6 columns (for the S different partitions):
+#' (No of Model Parameters, NLL, AIC, AIC_c, AIC_d, AIC_w) which compares all upgma-generarated
+#' partitions. It also produces two .tex files in the working directory containing tables of the best grouping and a summary of the model selection process.
+
 
 upgma_model_selection <- function( Data, Time, Factor, Tags,
                              Colonization = 1.0, Extinction = 1.0,

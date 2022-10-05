@@ -41,7 +41,7 @@
 #'
 #' @seealso \code{\link{rates_calculator}}
 #'
-#' @examples \dontrun{
+#' @examples \donttest{
 #' all_environmental_fit(idaho[[1]],3:23,c("idaho[[2]]$TOTAL.ppt",
 #' "idaho[[2]]$ANNUAL.temp"),0.13,0.19,100000)
 #' greedy_environmental_fit(idaho[[1]],3:23,c("idaho[[2]]$TOTAL.ppt",
@@ -55,7 +55,7 @@
 #' params[3]), expression(params[2] * idaho[[2]]$ANNUAL.temp[i] + params[4]))
 #'
 #' @export
-all_environmental_fit <- function(dataset, vector, env, c, e, aic, verbose = F) {
+all_environmental_fit <- function(dataset, vector, env, c, e, aic, verbose = FALSE) {
   co <- incounts(dataset, vector)
   t <- times(dataset, vector)
   env2 <- c(paste0(env, "[i]"), paste0(env, "[i]"))
@@ -132,7 +132,7 @@ NLL_env <- function(dataset, vector, params, c_expression, e_expression) {
 
 #' @rdname all_environmental_fit
 #' @export
-greedy_environmental_fit <- function(dataset, vector,env, c, e, aic, verbose = F) {
+greedy_environmental_fit <- function(dataset, vector,env, c, e, aic, verbose = FALSE) {
   co <- incounts(dataset, vector)
   t <- times(dataset, vector)
   env2 <- c(paste0(env, "[i]"), paste0(env, "[i]"))

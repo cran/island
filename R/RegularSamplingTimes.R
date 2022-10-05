@@ -28,7 +28,7 @@
 #'   \code{\link{irregular_multiple_datasets}}
 #' @export
 regular_sampling_scheme <- function(x, vector, level = NULL, n = NULL,
-                                    step = NULL, CI = F) {
+                                    step = NULL, CI = FALSE) {
 
   if (is.null(level)) {
     rates(changes(x,vector), CI)
