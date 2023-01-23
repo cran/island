@@ -1,11 +1,13 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([src/Checking_for_Parameter_Correctness.c])
+AC_INIT([island],[0.2.9])
 
+CC=`"${R_HOME}/bin/R" CMD config CC`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 
 PKG_CPPFLAGS="-I."
 
+AC_PROG_CC([cc cl gcc])
 
 # GSL configuration based on package 'gsl'
 ## Use gsl-config to find arguments for compiler and linker flags

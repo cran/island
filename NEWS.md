@@ -1,3 +1,8 @@
+# island 0.2.9
+* Solved configure issues, checking for gcc even in platforms that use clang.
+* Solved writing of .tex files in the working directory instead of the console, and changed a sprintf to snprintf in the compiled code.
+* Changed last URL to doi.
+
 # island 0.2.8
 * Solved configure problems produced by the updated toolchain in OS systems.
 * Solved special characters escaping.

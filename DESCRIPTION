@@ -1,8 +1,8 @@
 Package: island
 Type: Package
 Title: Stochastic Island Biogeography Theory Made Easy
-Version: 0.2.8
-Date: 2022-10-05
+Version: 0.2.9
+Date: 2023-01-23
 Authors@R: c(person("Vicente","Jimenez",email="vicente.jimenez.ontiveros@gmail.com",role=c("aut","cre")),
  person("David","Alonso", email = "dalonso@ceab.csic.es", role = "aut"))
 Description: Develops stochastic models based on the Theory of Island
@@ -17,9 +17,9 @@ LazyData: TRUE
 RoxygenNote: 7.1.1
 Suggests: testthat, knitr, rmarkdown, rootSolve
 VignetteBuilder: knitr
-Packaged: 2022-10-05 14:37:41 UTC; vicente
+Packaged: 2023-01-23 13:39:26 UTC; vicente
 Author: Vicente Jimenez [aut, cre],
   David Alonso [aut]
 Maintainer: Vicente Jimenez <vicente.jimenez.ontiveros@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-10-05 17:20:02 UTC
+Date/Publication: 2023-01-23 14:00:02 UTC

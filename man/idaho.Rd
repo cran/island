@@ -38,5 +38,5 @@ Only quadrats Q1, Q2, Q3, Q4, Q5, Q6, Q25 and Q26 are included here.
 Zachmann, L., Moffet, C., and Adler, P.. (2010). Mapped quadrats
   in sagebrush steppe long-term data for analyzing demographic rates and
   plant-plant interactions. \emph{Ecology},  \bold{91(11)}, 3427--3427.
-  \url{https://doi.wiley.com/10.1890/10-0404.1}
+  \doi{10.1890/10-0404.1}
 }

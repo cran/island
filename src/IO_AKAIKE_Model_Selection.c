@@ -111,7 +111,7 @@ void Model_Selection_AIC_Latex_Table( char ** Name,
     Row_Name[i] = (char *)calloc( 20, sizeof(char) );
     Row_Name[i][0] = '\0';
     No_of_PARAMETERS = 2*G[i];
-    sprintf( Num, "%d", No_of_PARAMETERS );
+    snprintf( Num, 10, "%d", No_of_PARAMETERS );
     strcat( Row_Name[i], Num );
     strcat( Row_Name[i], "-parameter model" );
 
@@ -212,32 +212,33 @@ void Latex_Table_Driver (char * Name_of_File,
 			 double ** VALUE )
 {
   int i,j;
-  FILE * fp;
 
-  fp = fopen(Name_of_File, "w");
-  fprintf(fp, "\\input{TableOpening}\n");
+  // FILE * fp;
+  // fp = fopen(Name_of_File, "w");
+  //
+  // Rprintf("\\input{TableOpening}\n");
 
-  fprintf(fp, "\\begin{table}\n");
-  fprintf(fp, "   \\centering\n");
-  fprintf(fp, "   \\begin{tabular}{l");
-  for(i=1; i<No_of_COLUMNS; i++) fprintf(fp, "c");
-  fprintf(fp, "}\n");
-  fprintf(fp, "%s", Column_Name[0]);
+  Rprintf("\\begin{table}\n");
+  Rprintf("   \\centering\n");
+  Rprintf("   \\begin{tabular}{l");
+  for(i=1; i<No_of_COLUMNS; i++) Rprintf("c");
+  Rprintf("}\n");
+  Rprintf("%s", Column_Name[0]);
   for(i=1; i<No_of_COLUMNS; i++)
-    fprintf(fp, "& %s", Column_Name[i]);
-  fprintf(fp, "\\"); fprintf(fp, "\\"); fprintf(fp, "\n");
-  fprintf(fp, "\\hline\n");
+    Rprintf("& %s", Column_Name[i]);
+  Rprintf("\\"); Rprintf("\\"); Rprintf("\n");
+  Rprintf("\\hline\n");
   for(i=0; i<No_of_ROWS; i++) {
-    fprintf(fp, "%s", Row_Name[i]);
+    Rprintf("%s", Row_Name[i]);
     for(j=1; j<No_of_COLUMNS; j++)
-      fprintf(fp, "& %g", VALUE[i][j-1]);
-    fprintf(fp, "\\"); fprintf(fp, "\\"); fprintf(fp, "\n");
+      Rprintf("& %g", VALUE[i][j-1]);
+    Rprintf("\\"); Rprintf("\\"); Rprintf("\n");
   }
-  fprintf(fp, "   \\end{tabular}\n");
-  fprintf(fp, "   \\caption{Caption goes here}\n");
-  fprintf(fp, "   \\label{tab:myfirsttable}\n");
-  fprintf(fp, "\\end{table}\n");
+  Rprintf("   \\end{tabular}\n");
+  Rprintf("   \\caption{Caption goes here}\n");
+  Rprintf("   \\label{tab:myfirsttable}\n");
+  Rprintf("\\end{table}\n");
 
-  fprintf(fp, "\\end{document}\n");
-  fclose(fp);
+  // Rprintf("\\end{document}\n");
+  // fclose(fp);
 }

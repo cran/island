@@ -89,7 +89,7 @@ upgma_model_selection(
 \value{
 The function generates, as an output, a Sx6 matrix with the following 6 columns (for the S different partitions):
 (No of Model Parameters, NLL, AIC, AIC_c, AIC_d, AIC_w) which compares all upgma-generarated
-partitions. It also produces two .tex files in the working directory containing tables of the best grouping and a summary of the model selection process.
+partitions. It also produces .tex code to generate a table of the best grouping and a summary of the model selection process.
 }
 \description{
 \code{upgma_model_selection} function conducts a model selection procedure intended to find an optimal
