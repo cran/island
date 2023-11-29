@@ -140,7 +140,7 @@ void Model_Selection_AIC_Latex_Table( char ** Name,
       Rprintf(" Index j = %d out of range (0,...,5) (Model Selection Latex Table Function)\n", j);
       // error(0,0, "Program aborted");
       // Rprintf("Program will abort...");
-			error(0,0,"Program aborted");
+			error("Program aborted");
     }
     // Rprintf("Using point p for something: %s", p); Rprintf("\n");
   }
@@ -176,7 +176,7 @@ void Model_Selection_AIC_Latex_Table( char ** Name,
     default:
       //printf(" Index i = %d out of range (0,1,2) (Model Selection Latex Table Function)\n", j);
       Rprintf(" Index i = %d out of range (0,1,2) (Model Selection Latex Table Function)\n", j);
-      error(0,0,"Program aborted");
+      error("Program aborted");
       // Rprintf("Program will abort..."); error(0,0,"Program aborted");
     }
     // Rprintf("Using point p for something: %s", p); Rprintf("\n");

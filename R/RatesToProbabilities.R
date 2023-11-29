@@ -12,7 +12,7 @@
 #'   / (c + e)) * (1 - exp( - (c + e) * dt))} \deqn{T_{10} = (c / (c + e)) * (1 -
 #'   exp( - (c + e) * dt))}
 #'
-#' @return A matrix with the transition probabilities T_{01} and T_{10} of the Markov chain
+#' @return A matrix with the transition probabilities \eqn{T_{01}} and \eqn{T_{10}} of the Markov chain
 #'   associated with the specified colonization and extinction rates.
 #' @examples cetotrans(0.13, 0.19)
 #' cetotrans(0.2, 0.2, 2)

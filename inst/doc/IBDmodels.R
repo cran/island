@@ -10,7 +10,7 @@ set.seed(101100111)
 dynamic <- ibd_models(n0 = 50, beta = 0.3, delta = 0.3, mu = 0.01, K = 300, time_v = 0:50, type = "Alonso")
 plot(dynamic, type = "l", main = "Mainland-island model")
 
-## ---- carrying capacity, fig.height=5, fig.width=7----------------------------
+## ----carrying capacity, fig.height=5, fig.width=7-----------------------------
 ts <- 0:100 #Time-vector
 ccc <- seq(10, 100, 10) #Carrying capacities
 out <- NULL #Initializing output

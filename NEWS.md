@@ -1,3 +1,8 @@
+# island 0.2.10
+* Solved documentation issues: package overview help page and other minor corrections. 
+* Mended C calls to error in several source files.
+* Changed citation style to new style using bibentry. 
+
 # island 0.2.9
 * Solved configure issues, checking for gcc even in platforms that use clang.
 * Solved writing of .tex files in the working directory instead of the console, and changed a sprintf to snprintf in the compiled code.

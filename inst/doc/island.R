@@ -14,17 +14,17 @@ text(x = 3, y = 16, "near")
 text(x = 9, y = 8, "large")
 text(x = 8, y = 16, "small")
 
-## ---- echo = F----------------------------------------------------------------
+## ----echo = F-----------------------------------------------------------------
 library(island)
 data(alonso15)
 knitr::kable(head(alonso15[[2]]))
 
-## ---- echo = F----------------------------------------------------------------
+## ----echo = F-----------------------------------------------------------------
 library(island)
 data(simberloff)
 knitr::kable(head(simberloff[[2]][, -(6:14)]))
 
-## ---- echo = F----------------------------------------------------------------
+## ----echo = F-----------------------------------------------------------------
 set.seed(10110111)
 df <- data.frame(Sp. = LETTERS[1:10], "1" = sample(c(0,1), 10, replace = T, prob = c(.6, .4)), "2" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)), "3" = sample(c(0,1), 10, replace = T, prob = c(.7, .3)))
 colnames(df)[2:4] <- 1:3
@@ -109,7 +109,7 @@ ic <- apply(X = sims, MARGIN = 1, FUN = quantile, c(0.025, 0.975))
 ic
 rates 
 
-## ---- echo = F, fig.align='center', fig.height=4.5, fig.width=6, fig.caption = T, fig.cap = "Temporal evolution in Kadmat atoll. The points connected with lines indicate the observed species richness, while the red dashed line indicates the 95% distribution of simulations. The dotted black line corresponds to one stochastic simulation of the colonization and extinction dynamics on the atoll."----
+## ----echo = F, fig.align='center', fig.height=4.5, fig.width=6, fig.caption = T, fig.cap = "Temporal evolution in Kadmat atoll. The points connected with lines indicate the observed species richness, while the red dashed line indicates the 95% distribution of simulations. The dotted black line corresponds to one stochastic simulation of the colonization and extinction dynamics on the atoll."----
 plot(c(2000:2003, 2010, 2011), colSums(df[, 3:8]), type = "b", xlab = "Year", ylab = "Species richness", main = "Kadmat")
 lines(2001:2011, colSums(sim_1), lty = "dotted")
 lines(2001:2011, ic[1, ], col = "red", lty = 2)
@@ -131,7 +131,7 @@ observed <- observed[-1]
 r_squared(observed = observed, simulated = simulated, sp = 156)
 
 
-## ---- echo = F----------------------------------------------------------------
+## ----echo = F-----------------------------------------------------------------
 knitr::kable(head(simberloff[[6]][, -(6:13)]))
 
 ## ----Single parameters, fig.align = 'center', fig.height = 4.5, fig.width = 6, fig.caption = T, fig.cap = "Colonization and extinction rates for the whole invertebrate community or selected taxonomic groups in island ST2."----
@@ -176,7 +176,7 @@ lines(days, c(0, med.st2), col = "green", lty = 2)
 lines(days, c(0, ic[1, ]), col = "magenta", lty = 3)
 lines(days, c(0, ic[2, ]), col = "magenta", lty = 3)
 
-## ---- fig.align='center', fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Colonization and extinction rates for the data from Simberloff (1969) on experimental island zoogeography. In green, some of the groups studied, in magenta the different islands."----
+## ----fig.align='center', fig.height=5, fig.width=7, fig.caption = T, fig.cap = "Colonization and extinction rates for the data from Simberloff (1969) on experimental island zoogeography. In green, some of the groups studied, in magenta the different islands."----
 rates.simberloff <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.001, e = 0.001, jacobian = T)
 rates.islands <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.001, e = 0.001, column = "Island", n = 5, jacobian = T)
 rates.taxonomy <- irregular_multiple_datasets(list = simberloff, vectorlist = list(3:17, 3:18, 3:17, 3:19, 3:17, 3:16), c = 0.0001, e = 0.0001, column = "Tax. Unit 1", n = 20, jacobian = T)

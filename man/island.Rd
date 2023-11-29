@@ -3,6 +3,7 @@
 \docType{package}
 \name{island}
 \alias{island}
+\alias{island-package}
 \title{island: Stochastic Island Biogeography Theory Made Easy}
 \description{
 Tools to develop stochastic models based on the Theory of Island Biogeography
@@ -17,7 +18,7 @@ In the simplest stochastic model of Island Biogeography, there is a
   sample an island in time, we obtain a time-series of presence-absence
   vectors for the different species of the pool, which allows us to estimate
   colonization (\eqn{c}) and extinction (\eqn{e}) rates under perfect
-  detectability. These are actual rates (in time^{-1} units). \cr The
+  detectability. These are actual rates (in \eqn{T^{-1}} units). \cr The
   simplest stochastic model of island biogeography assumes a single
   colonization-extinction pair for the whole community. This model implicitly
   assumes: first, neutrality of the species in the community, that is, all
@@ -49,3 +50,13 @@ Alonso, D., Pinyol-Gallemi, A., Alcoverro T. and Arthur, R..
   \emph{Ecology}, \bold{50(2)}, 296--314.
   \doi{10.2307/1934857}
 }
+\author{
+\strong{Maintainer}: Vicente Jimenez \email{vicente.jimenez.ontiveros@gmail.com}
+
+Authors:
+\itemize{
+  \item David Alonso \email{dalonso@ceab.csic.es}
+}
+
+}
+\keyword{internal}

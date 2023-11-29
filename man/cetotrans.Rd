@@ -14,7 +14,7 @@ cetotrans(c, e, dt = 1)
 \item{dt}{Interval of time or a vector of time intervals.}
 }
 \value{
-A matrix with the transition probabilities T_{01} and T_{10} of the Markov chain
+A matrix with the transition probabilities \eqn{T_{01}} and \eqn{T_{10}} of the Markov chain
   associated with the specified colonization and extinction rates.
 }
 \description{

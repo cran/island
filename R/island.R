@@ -11,7 +11,7 @@
 #'   sample an island in time, we obtain a time-series of presence-absence
 #'   vectors for the different species of the pool, which allows us to estimate
 #'   colonization (\eqn{c}) and extinction (\eqn{e}) rates under perfect
-#'   detectability. These are actual rates (in time^{-1} units). \cr The
+#'   detectability. These are actual rates (in \eqn{T^{-1}} units). \cr The
 #'   simplest stochastic model of island biogeography assumes a single
 #'   colonization-extinction pair for the whole community. This model implicitly
 #'   assumes: first, neutrality of the species in the community, that is, all
@@ -44,4 +44,6 @@
 #'
 #' @docType package
 #' @name island
+#' @keywords internal
+"_PACKAGE"
 NULL

@@ -90,7 +90,7 @@ void IO_Filtering_Out_Matrix( double ** Presence, int * No_of_SPECIES,
 
 	  if (Presence[m][n] != 0.0 && Presence[m][n] != 1.0 ) {
 			// Rprintf("Program aborted\n"); error(0,0,"Program aborted");
-			error(0,0,"Program aborted");
+			error("Program aborted");
 		}
 
 	  n++;
